@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Terms of Service — Air Conditioner Lab</title>
+    <meta
+      name="description"
+      content="Air Conditioner Lab Terms of Service — terms governing use of our lead-matching service."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f5f8fb;
+        --panel: #ffffff;
+        --ink: #0f1b2d;
+        --ink-soft: #4b5a6d;
+        --line: #e2e8f0;
+        --blue: #24abe0;
+        --radius: 16px;
+        --shadow-lg: 0 16px 40px rgba(15, 27, 45, 0.14);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        font-family: 'Inter', sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        -webkit-font-smoothing: antialiased;
+        line-height: 1.6;
+      }
+      h1,
+      h2,
+      h3 {
+        font-family: 'Sora', sans-serif;
+      }
+      .wrap {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+      a {
+        color: var(--blue);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      .topbar {
+        padding: 20px 0;
+        border-bottom: 1px solid var(--line);
+        background: var(--panel);
+      }
+      .topbar-inner {
+        display: flex;
+        align-items: center;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        height: 42px;
+        font-family: 'Sora', sans-serif;
+        font-weight: 800;
+        font-size: 20px;
+        color: var(--blue);
+      }
+      .page-header {
+        padding: 48px 0 8px;
+      }
+      .page-header h1 {
+        font-size: clamp(30px, 3.8vw, 40px);
+        font-weight: 800;
+        margin: 0 0 10px;
+        letter-spacing: -0.4px;
+      }
+      .page-header .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px 24px;
+        font-size: 13.5px;
+        color: var(--ink-soft);
+        margin: 0 0 6px;
+      }
+      .page-header .meta span {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .page-header .meta svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+        color: var(--blue);
+      }
+      .policy-section {
+        padding: 24px 0 56px;
+      }
+      .policy-card {
+        background: var(--panel);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--line);
+        padding: 40px 48px;
+      }
+      @media (max-width: 640px) {
+        .policy-card {
+          padding: 28px 20px;
+        }
+      }
+      .policy-card h2 {
+        font-size: 20px;
+        font-weight: 700;
+        margin: 32px 0 12px;
+        padding-bottom: 6px;
+        border-bottom: 2px solid var(--line);
+      }
+      .policy-card h2:first-child {
+        margin-top: 0;
+      }
+      .policy-card p {
+        font-size: 14.5px;
+        color: var(--ink-soft);
+        margin: 0 0 14px;
+      }
+      .policy-card ul {
+        font-size: 14.5px;
+        color: var(--ink-soft);
+        margin: 0 0 16px;
+        padding-left: 24px;
+      }
+      .policy-card li {
+        margin-bottom: 6px;
+      }
+      .policy-card li strong {
+        color: var(--ink);
+      }
+      .policy-card .highlight-box {
+        background: #f7fafd;
+        border: 1px solid var(--line);
+        border-left: 4px solid var(--blue);
+        border-radius: 10px;
+        padding: 18px 20px;
+        margin: 18px 0;
+        font-size: 14px;
+        color: var(--ink-soft);
+      }
+      .policy-card .highlight-box strong {
+        color: var(--ink);
+      }
+      .policy-card hr {
+        border: none;
+        border-top: 1px solid var(--line);
+        margin: 28px 0;
+      }
+      footer {
+        background: var(--ink);
+        color: #c9d3de;
+        padding: 40px 0 28px;
+        font-size: 13px;
+      }
+      .footer-grid {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 24px;
+        margin-bottom: 24px;
+      }
+      .footer-brand {
+        font-family: 'Sora', sans-serif;
+        color: #fff;
+        font-weight: 700;
+        font-size: 16px;
+      }
+      .footer-links {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+      .footer-links a {
+        color: #c9d3de;
+        text-decoration: none;
+      }
+      .footer-links a:hover {
+        color: #fff;
+        text-decoration: underline;
+      }
+      .footer-contact {
+        color: #9aa7b5;
+      }
+      .footer-legal {
+        border-top: 1px solid #223046;
+        padding-top: 18px;
+        color: #8896a6;
+        font-size: 11.5px;
+      }
+      .footer-legal p {
+        margin: 0 0 8px;
+      }
+
+      /* Mini weather / state CTA strip */
+      .mini-weather-section {
+        padding: 0 0 40px;
+      }
+      .mini-weather-card {
+        background: linear-gradient(135deg, #eaf7fc, #f7fafd);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 16px 22px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        flex-wrap: wrap;
+      }
+      .mini-weather-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+      }
+      .mini-weather-icon {
+        width: 36px;
+        height: 36px;
+        flex-shrink: 0;
+      }
+      .mini-weather-tag {
+        display: block;
+        font-size: 10.5px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: var(--blue);
+        margin-bottom: 2px;
+      }
+      .mini-weather-heading {
+        font-family: 'Sora', sans-serif;
+        font-size: 16px;
+        font-weight: 700;
+        margin: 0;
+        color: var(--ink);
+      }
+      .mini-weather-temp {
+        font-size: 12.5px;
+        color: var(--ink-soft);
+        margin-top: 2px;
+      }
+      .mini-weather-btn {
+        flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--blue);
+        color: #fff;
+        font-weight: 700;
+        font-size: 13.5px;
+        padding: 10px 18px;
+        border-radius: 999px;
+        text-decoration: none;
+        white-space: nowrap;
+      }
+      .mini-weather-btn:hover {
+        background: #1c93c4;
+        text-decoration: none;
+      }
+      @media (max-width: 560px) {
+        .mini-weather-card {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .mini-weather-btn {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+      :focus-visible {
+        outline: 2.5px solid var(--blue);
+        outline-offset: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="topbar">
+      <div class="wrap topbar-inner">
+        <a href="index.html"
+          ><img src="/logo.png" alt="Air Conditioner Lab" class="logo"
+        /></a>
+      </div>
+    </div>
+
+    <main>
+      <section class="page-header">
+        <div class="wrap">
+          <h1>Terms of Service</h1>
+          <div class="meta">
+            <span>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="round"
+              >
+                <path d="M12 22s7-7.5 7-13a7 7 0 10-14 0c0 5.5 7 13 7 13z" />
+                <circle cx="12" cy="9" r="2.5" />
+              </svg>
+              Air Conditioner Lab
+            </span>
+            <span>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="round"
+              >
+                <path d="M20 6L9 17l-5-5" />
+              </svg>
+              Last updated: July 30, 2026
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <section class="policy-section">
+        <div class="wrap">
+          <div class="policy-card">
+            <h2>Service Description</h2>
+            <p>
+              Air Conditioner Lab provides a free online platform that connects
+              business and renters with licensed HVAC professionals. We do not
+              perform repairs or employ any contractors. All work is performed
+              by independent third-party professionals.
+            </p>
+
+            <h2>User Responsibilities</h2>
+            <ul>
+              <li>
+                Provide accurate and truthful information on our request form.
+              </li>
+              <li>Not submit false or fraudulent requests.</li>
+              <li>
+                Be at least 18 years old, or use the service with a parent or
+                guardian.
+              </li>
+            </ul>
+
+            <h2>Consent to Contact</h2>
+            <p>
+              By submitting your information, you consent to be contacted by Air
+              Conditioner Lab and up to three matched professionals via phone,
+              text, and email — including autodialed or prerecorded messages.
+              Consent is not required for any purchase. Reply STOP to opt out of
+              texts.
+            </p>
+
+            <h2>Disclaimer &amp; Liability</h2>
+            <p>
+              The service is provided "as is." We make no guarantees about the
+              quality or availability of matched professionals. We are not
+              liable for any disputes or damages arising from services provided
+              by third-party professionals. Our total liability shall not exceed
+              $100.
+            </p>
+
+            <h2>Governing Law &amp; Changes</h2>
+            <p>
+              These terms are governed by the laws of the State of Georgia. We
+              may update these terms at any time; continued use after changes
+              constitutes acceptance.
+            </p>
+
+            <h2>Contact</h2>
+            <ul>
+              <li>
+                <strong>Email:</strong>
+                <a href="mailto:support@airconditionerlab.com"
+                  >support@airconditionerlab.com</a
+                >
+              </li>
+            </ul>
+
+            <hr />
+            <p style="font-size: 13px; color: #8896a6">
+              Last updated <strong>July 30, 2026</strong>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="mini-weather-section">
+        <div class="wrap">
+          <div class="mini-weather-card">
+            <div class="mini-weather-left">
+              <div class="mini-weather-icon" id="miniWeatherIcon"></div>
+              <div>
+                <span class="mini-weather-tag">Weather Forecast</span>
+                <h3 class="mini-weather-heading">
+                  Need Service in
+                  <span id="miniStateName" class="skeleton">your area</span>?
+                </h3>
+                <div class="mini-weather-temp" id="miniWeatherTemp"></div>
+              </div>
+            </div>
+            <a href="index.html#leadForm" class="mini-weather-btn">
+              Get Free Estimate
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+              >
+                <path d="M5 12h14M13 5l7 7-7 7" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap">
+        <div class="footer-grid">
+          <div>
+            <div class="footer-brand">Air Conditioner Lab</div>
+            <p class="footer-contact" style="margin-top: 8px; max-width: 32ch">
+              Connecting business with trusted local HVAC professionals.
+            </p>
+          </div>
+          <div class="footer-links">
+            <a href="privacy-policy.html">Privacy Policy</a>
+            <a href="terms-of-service.html" aria-current="page"
+              >Terms of Service</a
+            >
+            <a href="contact.html">Contact Us</a>
+            <a href="accessibility.html">Accessibility</a>
+          </div>
+        </div>
+        <div class="footer-legal">
+          <p>
+            &copy; <span id="year"></span> Air Conditioner Lab. All rights
+            reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+    <script>
+      document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+    <script>
+      (function () {
+        var FALLBACK = {
+          stateName: 'Georgia',
+          lat: 33.749,
+          lon: -84.388,
+        };
+        function weatherIcon(code) {
+          var sun =
+            '<circle cx="12" cy="12" r="5" fill="#FFB23D"/><g stroke="#FFB23D" stroke-width="2" stroke-linecap="round"><path d="M12 1v3M12 20v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M1 12h3M20 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></g>';
+          var cloud =
+            '<path d="M7 18a4.5 4.5 0 010-9 5.5 5.5 0 0110.6-1.7A4 4 0 0117 18H7z" fill="#B9CADB"/>';
+          var rain =
+            '<path d="M6 15a4.5 4.5 0 010-9 5.5 5.5 0 0110.6-1.2A4 4 0 0116 15H6z" fill="#9FB3C8"/><g stroke="#24abe0" stroke-width="2" stroke-linecap="round"><path d="M8 18l-1 3M12 18l-1 3M16 18l-1 3"/></g>';
+          var snow =
+            '<path d="M6 14a4.5 4.5 0 010-9 5.5 5.5 0 0110.6-1.2A4 4 0 0116 14H6z" fill="#C6D6E4"/><g stroke="#24abe0" stroke-width="2" stroke-linecap="round"><path d="M8 18v3M12 18v3M16 18v3"/></g>';
+          var inner = cloud;
+          if (code === 0 || code === 1) inner = sun;
+          else if (
+            [51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82].indexOf(
+              code,
+            ) !== -1
+          )
+            inner = rain;
+          else if ([71, 73, 75, 77, 85, 86].indexOf(code) !== -1) inner = snow;
+          return (
+            '<svg width="34" height="34" viewBox="0 0 24 24" fill="none">' +
+            inner +
+            '</svg>'
+          );
+        }
+        function setState(stateName) {
+          var el = document.getElementById('miniStateName');
+          if (el) {
+            el.textContent = stateName;
+            el.classList.remove('skeleton');
+          }
+        }
+        function renderTemp(data) {
+          try {
+            var t = Math.round(data.current.temperature_2m);
+            var tempEl = document.getElementById('miniWeatherTemp');
+            if (tempEl) tempEl.textContent = t + '\u00b0F today';
+            var iconEl = document.getElementById('miniWeatherIcon');
+            if (iconEl)
+              iconEl.innerHTML = weatherIcon(data.current.weather_code);
+          } catch (e) {}
+        }
+        function fetchWeather(lat, lon) {
+          fetch(
+            'https://api.open-meteo.com/v1/forecast?latitude=' +
+              lat +
+              '&longitude=' +
+              lon +
+              '&current=temperature_2m,weather_code&temperature_unit=fahrenheit',
+          )
+            .then(function (res) {
+              return res.json();
+            })
+            .then(renderTemp)
+            .catch(function () {});
+        }
+        function useFallback() {
+          setState(FALLBACK.stateName);
+          fetchWeather(FALLBACK.lat, FALLBACK.lon);
+        }
+        function locate() {
+          fetch('https://ipwho.is/')
+            .then(function (res) {
+              return res.json();
+            })
+            .then(function (data) {
+              if (data && data.success !== false && data.region) {
+                setState(data.region);
+                fetchWeather(
+                  data.latitude || FALLBACK.lat,
+                  data.longitude || FALLBACK.lon,
+                );
+              } else {
+                throw new Error('no region');
+              }
+            })
+            .catch(function () {
+              fetch('https://ipapi.co/json/')
+                .then(function (res) {
+                  return res.json();
+                })
+                .then(function (data) {
+                  if (data && data.region) {
+                    setState(data.region);
+                    fetchWeather(
+                      data.latitude || FALLBACK.lat,
+                      data.longitude || FALLBACK.lon,
+                    );
+                  } else {
+                    throw new Error('no region');
+                  }
+                })
+                .catch(useFallback);
+            });
+        }
+        locate();
+      })();
+    </script>
+  </body>
+</html>

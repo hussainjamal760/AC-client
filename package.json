@@ -1,0 +1,23 @@
+{
+  "name": "networx-affiliate-server",
+  "version": "1.0.0",
+  "description": "Simple Express server that securely proxies leads, calls, reports, demand, and inquiries to the Networx Affiliates API.",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "express-rate-limit": "^7.4.0",
+    "express-validator": "^7.2.0",
+    "fast-xml-parser": "^4.5.0",
+    "helmet": "^8.3.0",
+    "hpp": "^0.2.3",
+    "morgan": "^1.10.0"
+  }
+}

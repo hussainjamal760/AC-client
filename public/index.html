@@ -1,0 +1,2543 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Air Conditioner Lab — AC Repair & Maintenance</title>
+    <meta
+      name="description"
+      content="Get matched with a local, licensed HVAC pro in minutes. Free, no-obligation estimate."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f5f8fb;
+        --panel: #ffffff;
+        --ink: #0f1b2d;
+        --ink-soft: #4b5a6d;
+        --line: #e2e8f0;
+        /* Brand — #24abe0 is the logo color */
+        --blue: #24abe0;
+        --blue-deep: #0d8abf;
+        --blue-dark: #054e6f;
+        --blue-light: #dcf2fc;
+        --blue-mid: #aad4f0;
+        --blue-bright: #24abe0;
+        --amber: #ff8a3d;
+        --amber-deep: #e06e1f;
+        --teal: #17a398;
+        --danger: #d64545;
+        --radius: 16px;
+        --radius-sm: 10px;
+        --shadow: 0 8px 24px rgba(15, 27, 45, 0.08);
+        --shadow-lg: 0 16px 40px rgba(15, 27, 45, 0.14);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        font-family: 'Inter', sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        -webkit-font-smoothing: antialiased;
+      }
+      h1,
+      h2,
+      h3,
+      .display {
+        font-family: 'Sora', sans-serif;
+      }
+      img,
+      svg {
+        display: block;
+      }
+      .wrap {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+      a {
+        color: inherit;
+      }
+      button {
+        font-family: inherit;
+      }
+
+      /* ---------- Top bar (logo only, no nav) ---------- */
+      .topbar {
+        padding: 20px 0;
+        border-bottom: 1px solid var(--line);
+        background: var(--panel);
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        height: 42px;
+        width: auto;
+        font-family: 'Sora', sans-serif;
+        font-weight: 800;
+        font-size: 20px;
+        color: var(--blue);
+        text-decoration: none;
+      }
+      .logo-mark {
+        width: 34px;
+        height: 34px;
+        border-radius: 9px;
+        background: linear-gradient(135deg, var(--blue) 0%, var(--teal) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        flex-shrink: 0;
+      }
+      .logo-sub {
+        font-family: 'Inter', sans-serif;
+        font-weight: 500;
+        font-size: 12px;
+        color: var(--ink-soft);
+        margin-left: 2px;
+      }
+
+      /* trust ribbon */
+      .trust-ribbon {
+        background: var(--blue-dark);
+        color: #fff;
+        font-size: 13px;
+        text-align: center;
+        padding: 8px 12px;
+        font-weight: 500;
+        letter-spacing: 0.2px;
+      }
+
+      /* ---------- Hero ---------- */
+      .hero {
+        padding: 48px 0 40px;
+      }
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.1fr 1fr;
+        gap: 40px;
+        align-items: start;
+      }
+      @media (max-width: 900px) {
+        .hero-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--blue-light);
+        color: var(--blue-dark);
+        font-size: 13px;
+        font-weight: 600;
+        padding: 6px 12px;
+        border-radius: 999px;
+        margin-bottom: 16px;
+      }
+      .eyebrow .dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--blue-deep);
+        animation: pulse 1.6s infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.35;
+        }
+      }
+
+      .headline {
+        font-size: clamp(32px, 4.4vw, 46px);
+        line-height: 1.08;
+        font-weight: 800;
+        color: var(--ink);
+        margin: 0 0 14px;
+        letter-spacing: -0.5px;
+      }
+      .headline .city {
+        color: var(--blue);
+        position: relative;
+        white-space: nowrap;
+      }
+      .headline .city.skeleton {
+        color: transparent;
+        background: linear-gradient(
+          90deg,
+          #dbe6f3 25%,
+          #eef3f9 37%,
+          #dbe6f3 63%
+        );
+        background-size: 400% 100%;
+        animation: shimmer 1.4s ease infinite;
+        border-radius: 6px;
+      }
+      @keyframes shimmer {
+        0% {
+          background-position: 100% 0;
+        }
+        100% {
+          background-position: -100% 0;
+        }
+      }
+
+      .support-line {
+        font-size: 17px;
+        color: var(--ink-soft);
+        max-width: 46ch;
+        margin: 0 0 22px;
+        line-height: 1.5;
+      }
+
+      .region-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 14px 0 10px;
+      }
+      .region-badges .pill {
+        font-size: 12.5px;
+        font-weight: 700;
+        color: var(--blue-dark);
+        background: var(--blue-light);
+        border: 1px solid var(--blue-mid);
+        padding: 5px 12px;
+        border-radius: 999px;
+      }
+      .region-coverage-line {
+        font-size: 14px;
+        color: var(--ink-soft);
+        font-weight: 500;
+        margin: 0 0 20px;
+      }
+
+      .hero-badges {
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+        margin-bottom: 8px;
+      }
+      .hero-badge {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13.5px;
+        color: var(--ink-soft);
+        font-weight: 500;
+      }
+      .hero-badge svg {
+        width: 18px;
+        height: 18px;
+        color: var(--teal);
+        flex-shrink: 0;
+      }
+
+      .cta-inline {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--blue);
+        color: #fff;
+        font-weight: 700;
+        font-size: 15px;
+        padding: 14px 22px;
+        border-radius: 999px;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 10px 24px rgba(36, 171, 224, 0.35);
+        margin-top: 10px;
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease,
+          background 0.15s ease;
+      }
+      .cta-inline:hover {
+        background: var(--blue-deep);
+        transform: translateY(-1px);
+        box-shadow: 0 14px 28px rgba(36, 171, 224, 0.4);
+      }
+
+      /* ---------- Weather widget ---------- */
+      .weather-card {
+        background: var(--panel);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--line);
+        padding: 20px;
+        min-height: 260px;
+      }
+      .weather-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 14px;
+      }
+      .weather-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--ink-soft);
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+      }
+      .weather-loc-pin {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        color: var(--blue-deep);
+        font-weight: 600;
+      }
+      .weather-loc-pin svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      .weather-now {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 12px 4px 18px;
+        border-bottom: 1px solid var(--line);
+        margin-bottom: 14px;
+      }
+      .weather-now-icon {
+        width: 56px;
+        height: 56px;
+        flex-shrink: 0;
+      }
+      .weather-now-temp {
+        font-size: 40px;
+        font-weight: 800;
+        font-family: 'Sora', sans-serif;
+        line-height: 1;
+      }
+      .weather-now-desc {
+        font-size: 13px;
+        color: var(--ink-soft);
+        margin-top: 4px;
+      }
+
+      .forecast-row {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 6px;
+      }
+      @media (max-width: 520px) {
+        .forecast-row {
+          grid-template-columns: repeat(4, 1fr);
+        }
+        .forecast-day:nth-child(n + 5) {
+          display: none;
+        }
+      }
+      .forecast-day {
+        text-align: center;
+        padding: 10px 4px;
+        border-radius: var(--radius-sm);
+        background: #f7fafd;
+      }
+      .forecast-day.today {
+        background: var(--blue-light);
+        border: 1px solid var(--blue-mid);
+      }
+      .forecast-dow {
+        font-size: 11.5px;
+        font-weight: 700;
+        color: var(--ink-soft);
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+      }
+      .forecast-icon {
+        width: 30px;
+        height: 30px;
+        margin: 6px auto;
+      }
+      .forecast-hi {
+        font-size: 13.5px;
+        font-weight: 700;
+        color: var(--ink);
+      }
+      .forecast-lo {
+        font-size: 12px;
+        color: var(--ink-soft);
+      }
+
+      .weather-fallback-search {
+        display: none;
+        margin-top: 12px;
+        gap: 8px;
+      }
+      .weather-fallback-search input {
+        flex: 1;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 9px 12px;
+        font-size: 14px;
+        font-family: inherit;
+      }
+      .weather-fallback-search button {
+        background: var(--blue);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 9px 14px;
+        font-weight: 600;
+        font-size: 13px;
+        cursor: pointer;
+      }
+      .weather-note {
+        font-size: 11.5px;
+        color: #8896a6;
+        margin-top: 10px;
+        text-align: center;
+      }
+
+      /* ---------- Form / Quiz section ---------- */
+      .form-section {
+        padding: 56px 0 72px;
+        background:
+          radial-gradient(
+            860px 420px at 15% -10%,
+            rgba(36, 171, 224, 0.08),
+            transparent 60%
+          ),
+          radial-gradient(
+            760px 380px at 100% 0%,
+            rgba(36, 171, 224, 0.08),
+            transparent 55%
+          ),
+          linear-gradient(180deg, var(--bg) 0%, #eef3f9 100%);
+      }
+
+      /* Fullscreen focus-mode stage — wraps the whole quiz card.
+         When this element is put into the browser Fullscreen API,
+         it is the ONLY thing rendered on screen: no header, no
+         hero, no footer, no distractions. */
+      .quiz-stage {
+        position: relative;
+        max-width: 700px;
+        margin: 0 auto;
+      }
+      .quiz-stage:fullscreen,
+      .quiz-stage:-webkit-full-screen {
+        background:
+          radial-gradient(
+            1100px 620px at 12% 8%,
+            rgba(36, 171, 224, 0.35),
+            transparent 55%
+          ),
+          radial-gradient(
+            900px 560px at 92% 88%,
+            rgba(13, 138, 191, 0.32),
+            transparent 55%
+          ),
+          linear-gradient(160deg, #081826 0%, #0a2436 55%, #06364b 100%);
+        max-width: none;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 32px;
+        overflow-y: auto;
+      }
+      .quiz-stage:fullscreen .form-card,
+      .quiz-stage:-webkit-full-screen .form-card {
+        max-width: 720px;
+        width: 100%;
+        max-height: calc(100vh - 64px);
+        overflow-y: auto;
+        box-shadow: 0 30px 90px rgba(0, 0, 0, 0.45);
+        transform: scale(1);
+      }
+      .quiz-stage:fullscreen .focus-toggle,
+      .quiz-stage:-webkit-full-screen .focus-toggle {
+        top: 22px;
+        right: 22px;
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(255, 255, 255, 0.25);
+        color: #fff;
+        backdrop-filter: blur(6px);
+      }
+      .quiz-stage:fullscreen .focus-toggle:hover,
+      .quiz-stage:-webkit-full-screen .focus-toggle:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .quiz-stage:fullscreen .focus-hint,
+      .quiz-stage:-webkit-full-screen .focus-hint {
+        display: none;
+      }
+
+      /* Focus-mode toggle button */
+      .focus-toggle {
+        position: absolute;
+        top: -18px;
+        right: 14px;
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        background: #fff;
+        border: 1.5px solid var(--line);
+        color: var(--ink-soft);
+        font-family: inherit;
+        font-size: 12.5px;
+        font-weight: 700;
+        letter-spacing: 0.2px;
+        padding: 9px 14px;
+        border-radius: 999px;
+        cursor: pointer;
+        box-shadow: 0 8px 20px rgba(15, 27, 45, 0.1);
+        transition:
+          transform 0.15s ease,
+          border-color 0.15s ease,
+          color 0.15s ease,
+          box-shadow 0.15s ease;
+      }
+      .focus-toggle:hover {
+        border-color: var(--blue);
+        color: var(--blue-dark);
+        transform: translateY(-1px);
+        box-shadow: 0 10px 24px rgba(36, 171, 224, 0.18);
+      }
+      .focus-toggle svg {
+        width: 15px;
+        height: 15px;
+        flex-shrink: 0;
+      }
+      .focus-toggle .icon-exit {
+        display: none;
+      }
+      .focus-toggle.active .icon-enter {
+        display: none;
+      }
+      .focus-toggle.active .icon-exit {
+        display: block;
+      }
+      @media (max-width: 560px) {
+        .focus-toggle .fs-label {
+          display: none;
+        }
+        .focus-toggle {
+          top: -16px;
+          right: 10px;
+          padding: 10px;
+        }
+      }
+
+      .form-card {
+        background: var(--panel);
+        border-radius: 22px;
+        box-shadow: 0 20px 60px rgba(15, 27, 45, 0.14);
+        border: 1px solid var(--line);
+        max-width: 700px;
+        margin: 0 auto;
+        overflow: hidden;
+        position: relative;
+      }
+      .form-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(
+          90deg,
+          var(--blue-deep) 0%,
+          var(--blue-bright) 50%,
+          var(--blue-deep) 100%
+        );
+        background-size: 200% 100%;
+        animation: gradientSlide 6s ease infinite;
+        z-index: 1;
+      }
+      @keyframes gradientSlide {
+        0% {
+          background-position: 0% 0;
+        }
+        50% {
+          background-position: 100% 0;
+        }
+        100% {
+          background-position: 0% 0;
+        }
+      }
+
+      .quiz-kicker {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 22px 32px 0;
+      }
+      .quiz-kicker span {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.4px;
+        color: var(--blue-deep);
+        text-transform: uppercase;
+      }
+      .quiz-kicker svg {
+        width: 13px;
+        height: 13px;
+      }
+
+      .form-progress-wrap {
+        padding: 14px 32px 0;
+      }
+
+      .step-indicators {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        margin-bottom: 10px;
+      }
+      .step-dot {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: var(--line);
+        color: var(--ink-soft);
+        font-size: 11.5px;
+        font-weight: 700;
+        font-family: 'Sora', sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        flex-shrink: 0;
+        position: relative;
+      }
+      .step-dot.active {
+        background: linear-gradient(135deg, var(--blue), var(--blue-deep));
+        color: #fff;
+        box-shadow: 0 0 0 5px rgba(36, 171, 224, 0.15);
+        transform: scale(1.2);
+      }
+      .step-dot.completed {
+        background: var(--blue-deep);
+        color: #fff;
+      }
+      .step-line {
+        flex: 1;
+        height: 2px;
+        background: var(--line);
+        min-width: 10px;
+        transition: background 0.3s ease;
+      }
+      .step-line.completed {
+        background: var(--blue-deep);
+      }
+      .form-progress-label {
+        text-align: center;
+        font-size: 12px;
+        color: var(--ink-soft);
+        margin-top: 2px;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+      }
+      @media (max-width: 480px) {
+        .step-dot {
+          width: 22px;
+          height: 22px;
+          font-size: 9.5px;
+        }
+        .step-line {
+          min-width: 5px;
+        }
+        .form-progress-wrap {
+          padding: 10px 20px 0;
+        }
+        .quiz-kicker {
+          padding: 18px 20px 0;
+        }
+        .form-body {
+          padding: 22px 20px 26px;
+        }
+      }
+
+      .form-body {
+        padding: 30px 36px 34px;
+        min-height: 300px;
+      }
+      .step {
+        display: none;
+      }
+      .step.active {
+        display: block;
+        animation: stepIn 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      @keyframes stepIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .step-title {
+        font-size: 24px;
+        line-height: 1.25;
+        font-weight: 800;
+        margin: 0 0 6px;
+        letter-spacing: -0.3px;
+      }
+      .step-sub {
+        font-size: 14.5px;
+        color: var(--ink-soft);
+        margin: 0 0 22px;
+      }
+
+      .option-grid {
+        display: grid;
+        gap: 10px;
+      }
+      .option-btn {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        text-align: left;
+        padding: 15px 16px;
+        border: 1.5px solid var(--line);
+        border-radius: 14px;
+        background: #fff;
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--ink);
+        position: relative;
+        transition:
+          border-color 0.15s ease,
+          background 0.15s ease,
+          transform 0.15s ease,
+          box-shadow 0.15s ease;
+      }
+      .option-btn:hover {
+        border-color: var(--blue);
+        background: var(--blue-light);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 18px rgba(36, 171, 224, 0.12);
+      }
+      .option-btn.selected {
+        border-color: var(--blue);
+        background: var(--blue-light);
+        box-shadow: 0 0 0 3px rgba(36, 171, 224, 0.14);
+      }
+      .option-btn:active {
+        transform: translateY(0);
+      }
+      .option-btn .opt-icon {
+        flex-shrink: 0;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 11px;
+        background: var(--blue-light);
+        color: var(--blue-dark);
+        transition:
+          background 0.15s ease,
+          color 0.15s ease;
+      }
+      .option-btn .opt-icon svg {
+        width: 20px;
+        height: 20px;
+      }
+      .option-btn:hover .opt-icon,
+      .option-btn.selected .opt-icon {
+        background: var(--blue);
+        color: #fff;
+      }
+      .option-btn .opt-arrow {
+        margin-left: auto;
+        width: 16px;
+        height: 16px;
+        color: var(--line);
+        flex-shrink: 0;
+        transition:
+          color 0.15s ease,
+          transform 0.15s ease;
+      }
+      .option-btn:hover .opt-arrow {
+        color: var(--blue);
+        transform: translateX(2px);
+      }
+      .option-btn .opt-arrow svg {
+        width: 100%;
+        height: 100%;
+      }
+      .option-btn.selected .opt-arrow {
+        color: var(--blue);
+      }
+
+      .field {
+        margin-bottom: 16px;
+      }
+      .field label {
+        display: block;
+        font-size: 13.5px;
+        font-weight: 700;
+        color: var(--ink);
+        margin-bottom: 6px;
+      }
+      .field input,
+      .field select,
+      .field textarea {
+        width: 100%;
+        padding: 13px 15px;
+        border: 1.5px solid var(--line);
+        border-radius: 12px;
+        font-size: 15px;
+        font-family: inherit;
+        color: var(--ink);
+        background: #fff;
+        transition:
+          border-color 0.15s ease,
+          box-shadow 0.15s ease;
+      }
+      .field input:focus,
+      .field select:focus,
+      .field textarea:focus {
+        outline: none;
+        border-color: var(--blue);
+        box-shadow: 0 0 0 3px rgba(36, 171, 224, 0.12);
+      }
+      .field-error {
+        font-size: 12.5px;
+        color: var(--danger);
+        margin-top: 5px;
+        display: none;
+      }
+      .field.invalid input,
+      .field.invalid select,
+      .field.invalid textarea {
+        border-color: var(--danger);
+      }
+      .field.invalid .field-error {
+        display: block;
+      }
+
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+      @media (max-width: 480px) {
+        .two-col {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .consent-row {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        margin: 18px 0 4px;
+        padding: 14px;
+        background: #f7fafd;
+        border-radius: 12px;
+      }
+      .consent-row input {
+        margin-top: 3px;
+        flex-shrink: 0;
+      }
+      .consent-row label {
+        font-size: 12.5px;
+        color: var(--ink-soft);
+        line-height: 1.5;
+      }
+      .consent-row a {
+        color: var(--blue-dark);
+        font-weight: 600;
+        text-decoration: underline;
+      }
+
+      .step-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 24px;
+        gap: 12px;
+      }
+      .btn-back {
+        background: none;
+        border: none;
+        color: var(--ink-soft);
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        padding: 10px 4px;
+      }
+      .btn-back:hover {
+        color: var(--ink);
+      }
+      .btn-next {
+        background: var(--blue);
+        color: #fff;
+        border: none;
+        border-radius: 999px;
+        padding: 14px 28px;
+        font-weight: 700;
+        font-size: 15px;
+        cursor: pointer;
+        box-shadow: 0 8px 18px rgba(36, 171, 224, 0.28);
+        transition:
+          background 0.15s ease,
+          transform 0.15s ease,
+          box-shadow 0.15s ease;
+      }
+      .btn-next:hover {
+        background: var(--blue-deep);
+        transform: translateY(-1px);
+        box-shadow: 0 12px 24px rgba(36, 171, 224, 0.32);
+      }
+      .btn-next:disabled {
+        background: #b9c6d6;
+        cursor: not-allowed;
+        box-shadow: none;
+        transform: none;
+      }
+      .btn-submit {
+        background: var(--blue);
+        box-shadow: 0 8px 18px rgba(36, 171, 224, 0.32);
+      }
+      .btn-submit:hover {
+        background: var(--blue-deep);
+        box-shadow: 0 12px 24px rgba(36, 171, 224, 0.36);
+      }
+
+      .success-panel {
+        text-align: center;
+        padding: 24px 0 8px;
+      }
+      .success-icon-wrap {
+        width: 76px;
+        height: 76px;
+        margin: 0 auto 18px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(36, 171, 224, 0.16),
+          rgba(36, 171, 224, 0) 70%
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      @keyframes popIn {
+        from {
+          opacity: 0;
+          transform: scale(0.6);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      .success-icon {
+        width: 48px;
+        height: 48px;
+        color: var(--blue-deep);
+      }
+      .success-panel h3 {
+        font-size: 23px;
+        margin: 0 0 8px;
+      }
+      .success-panel p {
+        color: var(--ink-soft);
+        font-size: 14.5px;
+        max-width: 40ch;
+        margin: 0 auto 22px;
+      }
+      .btn-retake {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: none;
+        border: 1.5px solid var(--line);
+        color: var(--ink-soft);
+        font-weight: 700;
+        font-size: 14px;
+        padding: 11px 20px;
+        border-radius: 999px;
+        cursor: pointer;
+        transition:
+          border-color 0.15s ease,
+          color 0.15s ease,
+          background 0.15s ease;
+      }
+      .btn-retake:hover {
+        border-color: var(--blue);
+        color: var(--blue-dark);
+        background: var(--blue-light);
+      }
+      .btn-retake svg {
+        width: 15px;
+        height: 15px;
+      }
+
+      /* ---------- Trust / below-form ---------- */
+      .trust-section {
+        background: var(--panel);
+        border-top: 1px solid var(--line);
+        padding: 56px 0;
+      }
+      .trust-heading {
+        text-align: center;
+        max-width: 560px;
+        margin: 0 auto 36px;
+      }
+      .trust-heading h2 {
+        font-size: 26px;
+        margin: 0 0 8px;
+      }
+      .trust-heading p {
+        color: var(--ink-soft);
+        font-size: 14.5px;
+        margin: 0;
+      }
+      .how-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        max-width: 900px;
+        margin: 0 auto;
+      }
+      @media (max-width: 760px) {
+        .how-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .how-card {
+        padding: 22px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--bg);
+      }
+      .how-num {
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        background: var(--blue);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 14px;
+        margin-bottom: 12px;
+      }
+      .how-card h3 {
+        font-size: 15.5px;
+        margin: 0 0 6px;
+      }
+      .how-card p {
+        font-size: 13.5px;
+        color: var(--ink-soft);
+        margin: 0;
+        line-height: 1.55;
+      }
+
+      .obligation-note {
+        max-width: 700px;
+        margin: 36px auto 0;
+        text-align: center;
+        font-size: 13.5px;
+        color: var(--ink-soft);
+        padding: 16px 20px;
+        border-radius: var(--radius-sm);
+        background: #f7fafd;
+        border: 1px dashed var(--line);
+      }
+
+      /* ---------- Footer ---------- */
+      footer {
+        background: var(--ink);
+        color: #c9d3de;
+        padding: 40px 0 28px;
+        font-size: 13px;
+      }
+      .footer-grid {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 24px;
+        margin-bottom: 24px;
+      }
+      .footer-brand {
+        font-family: 'Sora', sans-serif;
+        color: #fff;
+        font-weight: 700;
+        font-size: 16px;
+      }
+      .footer-links {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+      .footer-links a {
+        color: #c9d3de;
+        text-decoration: none;
+      }
+      .footer-links a:hover {
+        color: #fff;
+        text-decoration: underline;
+      }
+      .footer-contact {
+        color: #9aa7b5;
+      }
+      .footer-legal {
+        border-top: 1px solid #223046;
+        padding-top: 18px;
+        color: #8896a6;
+        font-size: 11.5px;
+        line-height: 1.7;
+      }
+      .footer-legal p {
+        margin: 0 0 8px;
+      }
+
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+      }
+      :focus-visible {
+        outline: 2.5px solid var(--blue);
+        outline-offset: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="trust-ribbon">
+      Licensed &amp; insured local HVAC pros • Free, no-obligation estimates
+    </div>
+
+    <div class="topbar">
+      <div class="wrap">
+        <img src="/logo.png" alt="Air Conditioner Lab" class="logo" />
+      </div>
+    </div>
+
+    <main>
+      <section class="hero">
+        <div class="wrap hero-grid">
+          <div class="hero-copy">
+            <span class="eyebrow"
+              ><span class="dot"></span> Local pros available today</span
+            >
+            <h1 class="headline">
+              Need AC Repair or Maintenance in
+              <span class="city skeleton" id="stateName">your area</span>?
+            </h1>
+            <div
+              class="region-badges"
+              id="regionBadges"
+              aria-hidden="true"
+            ></div>
+            <p class="region-coverage-line" id="regionCoverageLine"></p>
+            <p class="support-line">
+              Request help or a free estimate from a local heating and
+              air-conditioning professional. Answer a few quick questions and
+              get matched in minutes.
+            </p>
+            <div class="hero-badges">
+              <span class="hero-badge"
+                ><svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linecap="round"
+                >
+                  <path d="M20 6L9 17l-5-5" />
+                </svg>
+                No obligation</span
+              >
+              <span class="hero-badge"
+                ><svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linecap="round"
+                >
+                  <path d="M20 6L9 17l-5-5" />
+                </svg>
+                Free estimate</span
+              >
+              <span class="hero-badge"
+                ><svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linecap="round"
+                >
+                  <path d="M20 6L9 17l-5-5" />
+                </svg>
+                Takes ~60 seconds</span
+              >
+            </div>
+            <a
+              class="cta-inline"
+              href="#leadForm"
+              style="text-decoration: none"
+            >
+              Get My Free Estimate
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+              >
+                <path d="M5 12h14M13 5l7 7-7 7" />
+              </svg>
+            </a>
+          </div>
+
+          <div class="weather-card" id="weatherCard">
+            <div class="weather-head">
+              <span class="weather-title">7-Day Forecast</span>
+              <span class="weather-loc-pin" id="weatherLocPin">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                >
+                  <path d="M12 22s7-7.5 7-13a7 7 0 10-14 0c0 5.5 7 13 7 13z" />
+                  <circle cx="12" cy="9" r="2.5" />
+                </svg>
+                <span id="weatherLocText">Your location</span>
+              </span>
+            </div>
+
+            <div class="weather-now" id="weatherNow">
+              <div class="weather-now-icon" id="weatherNowIcon"></div>
+              <div>
+                <div class="weather-now-temp" id="weatherNowTemp">--°</div>
+                <div class="weather-now-desc" id="weatherNowDesc">
+                  Loading current conditions…
+                </div>
+              </div>
+            </div>
+
+            <div class="forecast-row" id="forecastRow">
+              <!-- filled by JS -->
+            </div>
+
+            <div class="weather-fallback-search" id="weatherFallbackSearch">
+              <input
+                type="text"
+                id="zipFallbackInput"
+                placeholder="Enter ZIP code"
+                maxlength="10"
+                inputmode="numeric"
+              />
+              <button type="button" id="zipFallbackBtn">Go</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="form-section">
+        <div class="wrap">
+          <div class="quiz-stage" id="quizStage">
+            <button
+              type="button"
+              class="focus-toggle"
+              id="focusToggle"
+              aria-label="Enter full screen focus mode"
+              title="Full screen — hide everything but the quiz"
+            >
+              <svg
+                class="icon-enter"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M8 3H5a2 2 0 00-2 2v3M16 3h3a2 2 0 012 2v3M8 21H5a2 2 0 01-2-2v-3M16 21h3a2 2 0 002-2v-3"
+                />
+              </svg>
+              <svg
+                class="icon-exit"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M3 8V5a2 2 0 012-2h3M21 8V5a2 2 0 00-2-2h-3M3 16v3a2 2 0 002 2h3M21 16v3a2 2 0 01-2 2h-3"
+                />
+              </svg>
+              <span class="fs-label">Focus mode</span>
+            </button>
+
+            <div class="form-card" id="leadForm">
+              <div class="quiz-kicker">
+                <span
+                  ><svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.4"
+                    stroke-linecap="round"
+                  >
+                    <circle cx="12" cy="12" r="9" />
+                    <path d="M12 7v5l3 3" /></svg
+                  >Takes about 60 seconds</span
+                >
+              </div>
+              <div class="form-progress-wrap">
+                <div class="step-indicators">
+                  <span class="step-dot active" data-step="1">1</span>
+                  <span class="step-line"></span>
+                  <span class="step-dot" data-step="2">2</span>
+                  <span class="step-line"></span>
+                  <span class="step-dot" data-step="3">3</span>
+                  <span class="step-line"></span>
+                  <span class="step-dot" data-step="4">4</span>
+                  <span class="step-line"></span>
+                  <span class="step-dot" data-step="5">5</span>
+                </div>
+                <div class="form-progress-label" id="progressLabel">
+                  Step 1 of 5
+                </div>
+              </div>
+
+              <div class="form-body">
+                <!-- STEP 1: Core Details -->
+                <div class="step active" data-step="1">
+                  <h2 class="step-title">Get your free HVAC estimate</h2>
+                  <p class="step-sub">
+                    Answer a few quick questions and we'll match you with local, licensed pros.
+                  </p>
+                  
+                  <div class="field" id="zipField">
+                    <label for="zipInput">ZIP code</label>
+                    <input
+                      type="text"
+                      id="zipInput"
+                      inputmode="numeric"
+                      maxlength="10"
+                      placeholder="e.g. 30301"
+                      autocomplete="postal-code"
+                    />
+                    <div class="field-error">Please enter your ZIP code.</div>
+                  </div>
+
+                  <div class="field" id="systemTypeField">
+                    <label for="systemTypeSelect">What type of HVAC system?</label>
+                    <select id="systemTypeSelect">
+                      <option value="">Select a system type</option>
+                      <option value="Air Conditioning">Air Conditioning</option>
+                      <option value="Heating & Furnace Systems">Heating & Furnace Systems</option>
+                      <option value="Other">Other</option>
+                    </select>
+                    <div class="field-error">Please select a system type.</div>
+                  </div>
+
+                  <div class="field" id="serviceTypeField" style="display: none;">
+                    <label for="serviceTypeSelect">What service do you need?</label>
+                    <select id="serviceTypeSelect">
+                      <option value="">Select service type...</option>
+                    </select>
+                    <div class="field-error">Please select a specific service.</div>
+                  </div>
+
+                  <div class="field" id="commentsField">
+                    <label for="commentsTextarea">Anything else the pro should know?</label>
+                    <textarea
+                      id="commentsTextarea"
+                      rows="3"
+                      placeholder="Describe your issue, timing, or preferences..."
+                      style="resize: vertical;"
+                    ></textarea>
+                  </div>
+
+                  <div class="field" id="locationTypeField">
+                    <label for="locationTypeSelect">What kind of location is this?</label>
+                    <select id="locationTypeSelect">
+                      <option value="residential">Home / Residence</option>
+                      <option value="business">Commercial / Business</option>
+                    </select>
+                    <div class="field-error">Please select the location type.</div>
+                  </div>
+
+                  <div class="step-nav" style="justify-content: flex-end;">
+                    <button
+                      type="button"
+                      class="btn-next"
+                      data-next
+                      data-validate="core"
+                    >
+                      Continue
+                    </button>
+                  </div>
+                </div>
+
+                <!-- STEP 2: Timing -->
+                <div class="step" data-step="2">
+                  <h2 class="step-title">How soon do you need service?</h2>
+                  <p class="step-sub">
+                    We'll prioritize your request accordingly.
+                  </p>
+                  <div class="option-grid" id="timingOptions">
+                    <button
+                       type="button"
+                       class="option-btn"
+                       data-value="Emergency (ASAP)"
+                    >
+                       <span class="opt-icon"
+                         ><svg
+                           viewBox="0 0 24 24"
+                           fill="none"
+                           stroke="currentColor"
+                           stroke-width="2"
+                           stroke-linecap="round"
+                           stroke-linejoin="round"
+                         >
+                           <path d="M13 2L4 14h7l-1 8 10-14h-7l1-6z" /></svg
+                       ></span>
+                       Emergency — as soon as possible
+                    </button>
+                    <button
+                       type="button"
+                       class="option-btn"
+                       data-value="Next day"
+                    >
+                       <span class="opt-icon"
+                         ><svg
+                           viewBox="0 0 24 24"
+                           fill="none"
+                           stroke="currentColor"
+                           stroke-width="2"
+                           stroke-linecap="round"
+                           stroke-linejoin="round"
+                         >
+                           <rect x="3" y="5" width="18" height="16" rx="2" />
+                           <path d="M16 3v4M8 3v4M3 10h18" /></svg
+                       ></span>
+                       Next day
+                    </button>
+                    <button
+                       type="button"
+                       class="option-btn"
+                       data-value="Within a week"
+                    >
+                       <span class="opt-icon"
+                         ><svg
+                           viewBox="0 0 24 24"
+                           fill="none"
+                           stroke="currentColor"
+                           stroke-width="2"
+                           stroke-linecap="round"
+                           stroke-linejoin="round"
+                         >
+                           <rect x="3" y="5" width="18" height="16" rx="2" />
+                           <path d="M16 3v4M8 3v4M3 10h18M8 15h2M12 15h2" /></svg
+                       ></span>
+                       Within a week
+                    </button>
+                    <button
+                       type="button"
+                       class="option-btn"
+                       data-value="Just getting estimates"
+                    >
+                       <span class="opt-icon"
+                         ><svg
+                           viewBox="0 0 24 24"
+                           fill="none"
+                           stroke="currentColor"
+                           stroke-width="2"
+                           stroke-linecap="round"
+                           stroke-linejoin="round"
+                         >
+                           <path
+                             d="M21 11.5a8.4 8.4 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.4 8.4 0 01-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.4 8.4 0 013.8-.9h.5a8.5 8.5 0 018 8v.5z"
+                           /></svg
+                       ></span>
+                       Just getting estimates
+                    </button>
+                  </div>
+                  <div class="step-nav">
+                    <button type="button" class="btn-back" data-back>
+                      ← Back
+                    </button>
+                  </div>
+                </div>
+
+                <!-- STEP 3: Name -->
+                <div class="step" data-step="3">
+                  <h2 class="step-title">What's your name?</h2>
+                  <p class="step-sub">
+                    So your matched pro knows who to ask for.
+                  </p>
+                  <div class="two-col">
+                    <div class="field" id="firstNameField">
+                      <label for="firstName">First name</label>
+                      <input
+                        type="text"
+                        id="firstName"
+                        autocomplete="given-name"
+                        placeholder="Jordan"
+                      />
+                      <div class="field-error">
+                        Please enter your first name.
+                      </div>
+                    </div>
+                    <div class="field" id="lastNameField">
+                      <label for="lastName">Last name</label>
+                      <input
+                        type="text"
+                        id="lastName"
+                        autocomplete="family-name"
+                        placeholder="Smith"
+                      />
+                      <div class="field-error">
+                        Please enter your last name.
+                      </div>
+                    </div>
+                  </div>
+                  <div class="step-nav">
+                    <button type="button" class="btn-back" data-back>
+                      ← Back
+                    </button>
+                    <button
+                      type="button"
+                      class="btn-next"
+                      data-next
+                      data-validate="name"
+                    >
+                      Continue
+                    </button>
+                  </div>
+                </div>
+
+                <!-- STEP 4: Contact -->
+                <div class="step" data-step="4">
+                  <h2 class="step-title">Where should we send your matches?</h2>
+                  <p class="step-sub">Local pros will reach out directly.</p>
+                  <div class="field" id="phoneField">
+                    <label for="phone">Phone number</label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      autocomplete="tel"
+                      placeholder="(555) 123-4567"
+                    />
+                    <div class="field-error">
+                      Please enter a valid phone number.
+                    </div>
+                  </div>
+                  <div class="field" id="emailField">
+                    <label for="email">Email address</label>
+                    <input
+                      type="email"
+                      id="email"
+                      autocomplete="email"
+                      placeholder="you@example.com"
+                    />
+                    <div class="field-error">
+                      Please enter a valid email address.
+                    </div>
+                  </div>
+                  <div class="step-nav">
+                    <button type="button" class="btn-back" data-back>
+                      ← Back
+                    </button>
+                    <button
+                      type="button"
+                      class="btn-next"
+                      data-next
+                      data-validate="contact"
+                    >
+                      Continue
+                    </button>
+                  </div>
+                </div>
+
+                <!-- STEP 5: Consent + submit -->
+                <div class="step" data-step="5">
+                  <h2 class="step-title">Almost done!</h2>
+                  <p class="step-sub">
+                    Review and confirm to get matched with local pros.
+                  </p>
+                  <div
+                    id="summaryBox"
+                    style="
+                      font-size: 13.5px;
+                      color: var(--ink-soft);
+                      background: #f7fafd;
+                      border-radius: var(--radius-sm);
+                      padding: 14px 16px;
+                      margin-bottom: 6px;
+                      line-height: 1.7;
+                    "
+                  ></div>
+                  <div class="consent-row">
+                    <input type="checkbox" id="consentCheck" />
+                    <label for="consentCheck">
+                      By checking this box and clicking "Get My Free Estimate,"
+                      I agree to be contacted by Air Conditioner Lab and up to 3
+                      matched service professionals via phone, text, and email —
+                      including by autodialer and prerecorded messages — at the
+                      number and email provided, even if listed on a Do Not Call
+                      registry. Consent is not a condition of purchase.
+                      Message/data rates may apply. See our
+                      <a href="privacy-policy.html">Privacy Policy</a> and
+                      <a href="terms-of-service.html">Terms</a>.
+                    </label>
+                  </div>
+                  <div
+                    class="field-error"
+                    id="consentError"
+                    style="display: none"
+                  >
+                    Please agree to the consent terms to continue.
+                  </div>
+                  <div
+                    class="field-error"
+                    id="submitError"
+                    style="display: none; text-align: center; margin-top: 12px"
+                  ></div>
+                  <div class="step-nav">
+                    <button type="button" class="btn-back" data-back>
+                      ← Back
+                    </button>
+                    <button
+                      type="button"
+                      class="btn-next btn-submit"
+                      id="submitBtn"
+                    >
+                      Get My Free Estimate
+                    </button>
+                  </div>
+                </div>
+
+                <!-- SUCCESS -->
+                <div class="step" data-step="success">
+                  <div class="success-panel">
+                    <div class="success-icon-wrap">
+                      <svg
+                        class="success-icon"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M8 12l3 3 5-6" />
+                      </svg>
+                    </div>
+                    <h3>You're all set!</h3>
+                    <p>
+                      We're matching you with licensed HVAC pros in your area
+                      now. Expect a call or text shortly.
+                    </p>
+                    <button type="button" class="btn-retake" id="retakeBtn">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.3"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M21 12a9 9 0 11-3-6.7" />
+                        <path d="M21 3v6h-6" />
+                      </svg>
+                      Retake Survey
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="trust-section">
+        <div class="wrap">
+          <div class="trust-heading">
+            <h2>How matching works</h2>
+            <p>
+              Air Conditioner Lab connects you with pre-screened, local HVAC
+              professionals — free, and with no obligation to hire.
+            </p>
+          </div>
+          <div class="how-grid">
+            <div class="how-card">
+              <div class="how-num">1</div>
+              <h3>Tell us what's going on</h3>
+              <p>
+                Answer a few quick questions about your AC issue, timing, and
+                location.
+              </p>
+            </div>
+            <div class="how-card">
+              <div class="how-num">2</div>
+              <h3>We match you locally</h3>
+              <p>
+                We connect your request with licensed, insured HVAC pros who
+                service your ZIP code.
+              </p>
+            </div>
+            <div class="how-card">
+              <div class="how-num">3</div>
+              <h3>Compare, no pressure</h3>
+              <p>
+                Pros contact you directly with estimates. You choose who to
+                hire, or walk away — it's free either way.
+              </p>
+            </div>
+          </div>
+          <div class="obligation-note">
+            Submitting this form does not obligate you to hire any professional.
+            Air Conditioner Lab is a free matching service and does not perform
+            HVAC repairs directly.
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer id="privacy">
+      <div class="wrap">
+        <div class="footer-grid">
+          <div>
+            <div class="footer-brand">Air Conditioner Lab</div>
+            <p class="footer-contact" style="margin-top: 8px; max-width: 32ch">
+              Connecting business with trusted local HVAC professionals.
+            </p>
+          </div>
+          <div class="footer-links">
+            <a href="privacy-policy.html">Privacy Policy</a>
+            <a href="terms-of-service.html">Terms of Service</a>
+            <a href="contact.html">Contact Us</a>
+            <a href="accessibility.html">Accessibility</a>
+          </div>
+        </div>
+        <div class="footer-legal">
+          <p>
+            © <span id="year"></span> Air Conditioner Lab. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      /* =========================================================
+   CONFIG
+========================================================= */
+      const FALLBACK_LOCATION = {
+        stateName: 'Georgia',
+        stateAbbr: 'GA',
+        lat: 33.749,
+        lon: -84.388,
+      };
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      /* =========================================================
+   WEATHER ICONS (Open-Meteo WMO weather codes -> simple SVG)
+   Open-Meteo is used directly because the free WhatAWeather iframe
+   widget returned "service unavailable" for US coordinates in testing.
+========================================================= */
+      function weatherIcon(code, size = 30) {
+        const stroke = '#24abe0';
+        const sun = `<circle cx="12" cy="12" r="5" fill="#FFB23D" stroke="none"/><g stroke="#FFB23D" stroke-width="2" stroke-linecap="round"><path d="M12 1v3M12 20v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M1 12h3M20 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></g>`;
+        const cloud = `<path d="M7 18a4.5 4.5 0 010-9 5.5 5.5 0 0110.6-1.7A4 4 0 0117 18H7z" fill="#B9CADB" stroke="none"/>`;
+        const cloudSun = `<g><circle cx="8" cy="8" r="3.6" fill="#FFB23D" stroke="none"/><path d="M9 18a4.5 4.5 0 010-9 5.5 5.5 0 0110.6-1.2A4 4 0 0119 18H9z" fill="#B9CADB" stroke="none" transform="translate(-1,0)"/></g>`;
+        const rain = `<path d="M6 15a4.5 4.5 0 010-9 5.5 5.5 0 0110.6-1.2A4 4 0 0116 15H6z" fill="#9FB3C8" stroke="none"/><g stroke="${stroke}" stroke-width="2" stroke-linecap="round"><path d="M8 18l-1 3M12 18l-1 3M16 18l-1 3"/></g>`;
+        const storm = `<path d="M6 14a4.5 4.5 0 010-9 5.5 5.5 0 0110.6-1.2A4 4 0 0116 14H6z" fill="#8496A9" stroke="none"/><path d="M12 14l-2.5 5h3L11 23l5-6.5h-3z" fill="#FFB23D" stroke="none"/>`;
+        const snow = `<path d="M6 14a4.5 4.5 0 010-9 5.5 5.5 0 0110.6-1.2A4 4 0 0116 14H6z" fill="#C6D6E4" stroke="none"/><g stroke="${stroke}" stroke-width="2" stroke-linecap="round"><path d="M8 18v3M12 18v3M16 18v3"/></g>`;
+        const fog = `<g stroke="#A9B9C8" stroke-width="2.2" stroke-linecap="round"><path d="M4 9h16M3 13h18M5 17h14"/></g>`;
+
+        let inner = cloud;
+        if (code === 0 || code === 1) inner = sun;
+        else if (code === 2) inner = cloudSun;
+        else if (code === 3) inner = cloud;
+        else if ([45, 48].includes(code)) inner = fog;
+        else if (
+          [51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82].includes(code)
+        )
+          inner = rain;
+        else if ([71, 73, 75, 77, 85, 86].includes(code)) inner = snow;
+        else if ([95, 96, 99].includes(code)) inner = storm;
+
+        return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none">${inner}</svg>`;
+      }
+      function weatherLabel(code) {
+        const map = {
+          0: 'Clear sky',
+          1: 'Mostly clear',
+          2: 'Partly cloudy',
+          3: 'Overcast',
+          45: 'Foggy',
+          48: 'Foggy',
+          51: 'Light drizzle',
+          53: 'Drizzle',
+          55: 'Heavy drizzle',
+          56: 'Freezing drizzle',
+          57: 'Freezing drizzle',
+          61: 'Light rain',
+          63: 'Rain',
+          65: 'Heavy rain',
+          66: 'Freezing rain',
+          67: 'Freezing rain',
+          71: 'Light snow',
+          73: 'Snow',
+          75: 'Heavy snow',
+          77: 'Snow grains',
+          80: 'Rain showers',
+          81: 'Rain showers',
+          82: 'Violent showers',
+          85: 'Snow showers',
+          86: 'Snow showers',
+          95: 'Thunderstorm',
+          96: 'Thunderstorm',
+          99: 'Thunderstorm',
+        };
+        return map[code] || '—';
+      }
+
+      /* =========================================================
+   HEADLINE + WEATHER RENDER
+   Per client feedback (Jul 27): IP geolocation is often only
+   accurate to "nearest major city," which for rural/small-town
+   visitors can be 100+ miles off and damages trust. We now show
+   STATE-level headline copy with directional coverage badges
+   instead of guessing a specific city. The weather forecast still
+   uses the nearest resolvable coordinates for accuracy, but the
+   UI no longer names a (possibly wrong) city — it just says
+   "Your location."
+========================================================= */
+      function setStateHeadline(stateName, stateAbbr) {
+        const el = document.getElementById('stateName');
+        el.textContent = stateName;
+        el.classList.remove('skeleton');
+
+        const abbr = stateAbbr || '';
+        const badgeWrap = document.getElementById('regionBadges');
+        const coverageLine = document.getElementById('regionCoverageLine');
+
+        if (abbr) {
+          const dirs = ['North', 'South', 'East', 'West'];
+          badgeWrap.innerHTML = dirs
+            .map((d) => `<span class="pill">${d} ${abbr}</span>`)
+            .join('');
+          coverageLine.textContent = `We've got you covered, wherever you are in ${stateName}.`;
+        } else {
+          badgeWrap.innerHTML = '';
+          coverageLine.textContent = '';
+        }
+      }
+
+      function renderWeather(data) {
+        const cur = data.current;
+        document.getElementById('weatherNowIcon').innerHTML = weatherIcon(
+          cur.weather_code,
+          56,
+        );
+        document.getElementById('weatherNowTemp').textContent =
+          Math.round(cur.temperature_2m) + '°F';
+        document.getElementById('weatherNowDesc').textContent = weatherLabel(
+          cur.weather_code,
+        );
+
+        const days = data.daily;
+        const row = document.getElementById('forecastRow');
+        row.innerHTML = '';
+        const dowFmt = new Intl.DateTimeFormat('en-US', { weekday: 'short' });
+
+        days.time.forEach((dateStr, i) => {
+          const date = new Date(dateStr + 'T12:00:00');
+          const dow = i === 0 ? 'Today' : dowFmt.format(date);
+          const hi = Math.round(days.temperature_2m_max[i]);
+          const lo = Math.round(days.temperature_2m_min[i]);
+          const code = days.weather_code[i];
+          const card = document.createElement('div');
+          card.className = 'forecast-day' + (i === 0 ? ' today' : '');
+          card.innerHTML = `
+      <div class="forecast-dow">${dow}</div>
+      <div class="forecast-icon">${weatherIcon(code, 30)}</div>
+      <div class="forecast-hi">${hi}°</div>
+      <div class="forecast-lo">${lo}°</div>
+    `;
+          row.appendChild(card);
+        });
+      }
+
+      async function fetchWeather(lat, lon) {
+        const url =
+          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
+          `&current=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min` +
+          `&temperature_unit=fahrenheit&timezone=auto&forecast_days=7`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('weather fetch failed');
+        return res.json();
+      }
+
+      function showFallbackSearch() {
+        document.getElementById('weatherFallbackSearch').style.display = 'flex';
+      }
+
+      async function useFallbackLocation(reason) {
+        console.warn('Using fallback location:', reason);
+        setStateHeadline(
+          FALLBACK_LOCATION.stateName,
+          FALLBACK_LOCATION.stateAbbr,
+        );
+        document.getElementById('weatherLocText').textContent =
+          'Your location (default area)';
+        try {
+          const w = await fetchWeather(
+            FALLBACK_LOCATION.lat,
+            FALLBACK_LOCATION.lon,
+          );
+          renderWeather(w);
+        } catch (e) {
+          document.getElementById('weatherNowDesc').textContent =
+            'Weather unavailable right now.';
+        }
+        showFallbackSearch();
+      }
+
+      /* Detected ZIP gets stashed here and used to prefill the form's ZIP step */
+      let detectedZip = '';
+
+      function prefillZipIfKnown() {
+        const zipInput = document.getElementById('zipInput');
+        const clean = (detectedZip || '').toString().trim();
+        if (clean && zipInput && !zipInput.value) {
+          zipInput.value = clean;
+          zipInput.placeholder = clean + ' (detected — edit if needed)';
+        }
+      }
+
+      /* Full state name lookup, used as a fallback when a provider only
+   returns a 2-letter code without the spelled-out region name. */
+      const STATE_NAMES = {
+        AL: 'Alabama',
+        AK: 'Alaska',
+        AZ: 'Arizona',
+        AR: 'Arkansas',
+        CA: 'California',
+        CO: 'Colorado',
+        CT: 'Connecticut',
+        DE: 'Delaware',
+        FL: 'Florida',
+        GA: 'Georgia',
+        HI: 'Hawaii',
+        ID: 'Idaho',
+        IL: 'Illinois',
+        IN: 'Indiana',
+        IA: 'Iowa',
+        KS: 'Kansas',
+        KY: 'Kentucky',
+        LA: 'Louisiana',
+        ME: 'Maine',
+        MD: 'Maryland',
+        MA: 'Massachusetts',
+        MI: 'Michigan',
+        MN: 'Minnesota',
+        MS: 'Mississippi',
+        MO: 'Missouri',
+        MT: 'Montana',
+        NE: 'Nebraska',
+        NV: 'Nevada',
+        NH: 'New Hampshire',
+        NJ: 'New Jersey',
+        NM: 'New Mexico',
+        NY: 'New York',
+        NC: 'North Carolina',
+        ND: 'North Dakota',
+        OH: 'Ohio',
+        OK: 'Oklahoma',
+        OR: 'Oregon',
+        PA: 'Pennsylvania',
+        RI: 'Rhode Island',
+        SC: 'South Carolina',
+        SD: 'South Dakota',
+        TN: 'Tennessee',
+        TX: 'Texas',
+        UT: 'Utah',
+        VT: 'Vermont',
+        VA: 'Virginia',
+        WA: 'Washington',
+        WV: 'West Virginia',
+        WI: 'Wisconsin',
+        WY: 'Wyoming',
+        DC: 'District of Columbia',
+      };
+
+      /* Two free, no-key IP geolocation providers, tried in order, before
+   falling back to the static default location. */
+      async function lookupIpLocation() {
+        // Primary: ipwho.is
+        try {
+          const res = await fetch('https://ipwho.is/');
+          if (res.ok) {
+            const geo = await res.json();
+            if (geo && geo.success && geo.latitude && geo.longitude) {
+              return {
+                stateAbbr: geo.region_code || '',
+                stateName:
+                  geo.region ||
+                  STATE_NAMES[geo.region_code] ||
+                  geo.region_code ||
+                  '',
+                postal: geo.postal || '',
+                lat: geo.latitude,
+                lon: geo.longitude,
+              };
+            }
+          }
+        } catch (e) {
+          console.warn('ipwho.is failed', e);
+        }
+
+        // Secondary: ipapi.co
+        try {
+          const res = await fetch('https://ipapi.co/json/');
+          if (res.ok) {
+            const geo = await res.json();
+            if (geo && !geo.error && geo.latitude && geo.longitude) {
+              return {
+                stateAbbr: geo.region_code || '',
+                stateName:
+                  geo.region ||
+                  STATE_NAMES[geo.region_code] ||
+                  geo.region_code ||
+                  '',
+                postal: geo.postal || '',
+                lat: geo.latitude,
+                lon: geo.longitude,
+              };
+            }
+          }
+        } catch (e) {
+          console.warn('ipapi.co failed', e);
+        }
+
+        return null;
+      }
+
+      async function initLocationAndWeather() {
+        try {
+          const loc = await lookupIpLocation();
+          if (!loc)
+            return useFallbackLocation('all geolocation providers failed');
+
+          const stateName = loc.stateName || FALLBACK_LOCATION.stateName;
+          const stateAbbr = loc.stateAbbr || FALLBACK_LOCATION.stateAbbr;
+          detectedZip = loc.postal || '';
+          setStateHeadline(stateName, stateAbbr);
+          document.getElementById('weatherLocText').textContent =
+            'Your location';
+          const w = await fetchWeather(loc.lat, loc.lon);
+          renderWeather(w);
+          prefillZipIfKnown();
+        } catch (e) {
+          useFallbackLocation(e.message);
+        }
+      }
+
+      /* Manual ZIP fallback search (uses Zippopotam.us — free, no key) */
+      document
+        .getElementById('zipFallbackBtn')
+        .addEventListener('click', lookupZipForWeather);
+      document
+        .getElementById('zipFallbackInput')
+        .addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') lookupZipForWeather();
+        });
+      async function lookupZipForWeather() {
+        const zip = document.getElementById('zipFallbackInput').value.trim();
+        if (!/^\d{5}$/.test(zip)) return;
+        try {
+          const res = await fetch(`https://api.zippopotam.us/us/${zip}`);
+          if (!res.ok) throw new Error('zip not found');
+          const data = await res.json();
+          const place = data.places[0];
+          const stateName = place['state'];
+          const stateAbbr = place['state abbreviation'];
+          const lat = parseFloat(place.latitude);
+          const lon = parseFloat(place.longitude);
+          detectedZip = zip;
+          setStateHeadline(stateName, stateAbbr);
+          document.getElementById('weatherLocText').textContent =
+            'Your location';
+          const w = await fetchWeather(lat, lon);
+          renderWeather(w);
+          prefillZipIfKnown();
+        } catch (e) {
+          document.getElementById('weatherLocText').textContent =
+            'ZIP not found — try again';
+        }
+      }
+
+      initLocationAndWeather();
+
+      /* =========================================================
+   MULTI-STEP FORM
+========================================================= */
+      const formData = {};
+      const totalSteps = 5;
+      let currentStep = 1;
+
+      const stepEls = {};
+      document.querySelectorAll('.step[data-step]').forEach((el) => {
+        stepEls[el.dataset.step] = el;
+      });
+
+      function goToStep(n) {
+        stepEls[currentStep].classList.remove('active');
+        currentStep = n;
+        stepEls[currentStep].classList.add('active');
+        updateProgress();
+        document
+          .getElementById('leadForm')
+          .scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      function updateProgress() {
+        const numeric =
+          typeof currentStep === 'number' ? currentStep : totalSteps;
+        document.getElementById('progressLabel').textContent =
+          currentStep === 'success'
+            ? 'Complete'
+            : `Step ${numeric} of ${totalSteps}`;
+        // Update step indicator dots
+        document.querySelectorAll('.step-dot').forEach((dot) => {
+          const s = parseInt(dot.dataset.step);
+          if (currentStep === 'success') {
+            dot.classList.remove('active');
+            dot.classList.add('completed');
+          } else {
+            dot.classList.toggle('active', s === numeric);
+            dot.classList.toggle('completed', s < numeric);
+          }
+        });
+        document.querySelectorAll('.step-line').forEach((line, i) => {
+          if (currentStep === 'success') {
+            line.classList.add('completed');
+          } else {
+            line.classList.toggle('completed', i + 1 < numeric);
+          }
+        });
+      }
+
+      /* Add a trailing chevron affordance to every option button */
+      document.querySelectorAll('.option-btn').forEach((btn) => {
+        const arrow = document.createElement('span');
+        arrow.className = 'opt-arrow';
+        arrow.innerHTML =
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+        btn.appendChild(arrow);
+      });
+
+      /* Option-button steps (2) auto-advance */
+      function wireOptionGroup(containerId, key, nextStep) {
+        const container = document.getElementById(containerId);
+        container.querySelectorAll('.option-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            container
+              .querySelectorAll('.option-btn')
+              .forEach((b) => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            formData[key] = btn.dataset.value;
+            setTimeout(() => goToStep(nextStep), 180);
+          });
+        });
+      }
+      wireOptionGroup('timingOptions', 'timing', 3);
+
+      /* Back buttons — step back to the previous question */
+      document.querySelectorAll('[data-back]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const map = { 2: 1, 3: 2, 4: 3, 5: 4 };
+          const prev = map[currentStep];
+          if (prev) goToStep(prev);
+        });
+      });
+
+      /* Field validation helpers */
+      function setInvalid(fieldId, invalid) {
+        const el = document.getElementById(fieldId);
+        if (el) el.classList.toggle('invalid', invalid);
+      }
+
+      function validateStep(type) {
+        if (type === 'core') {
+          const zipInput = document.getElementById('zipInput');
+          const zip = zipInput.value.trim();
+          const systemType = document.getElementById('systemTypeSelect').value;
+          const serviceTypeSelect = document.getElementById('serviceTypeSelect');
+          const serviceType = serviceTypeSelect.value;
+          const locationType = document.getElementById('locationTypeSelect').value;
+
+          const zipOk = /^\d{5}$/.test(zip);
+          const systemTypeOk = systemType !== '';
+          const serviceTypeOk = serviceType !== '';
+          const locationTypeOk = locationType !== '';
+
+          setInvalid('zipField', !zipOk);
+          setInvalid('systemTypeField', !systemTypeOk);
+          setInvalid('serviceTypeField', !serviceTypeOk);
+          setInvalid('locationTypeField', !locationTypeOk);
+
+          if (zipOk && systemTypeOk && serviceTypeOk && locationTypeOk) {
+            formData.zip = zip;
+            formData.systemType = systemType;
+            formData.serviceType = serviceTypeSelect.options[serviceTypeSelect.selectedIndex].text;
+            formData.taskId = serviceType; // value contains Networx Task ID
+            formData.propertyStatus = locationType; // 'residential' or 'business'
+            formData.comments = document.getElementById('commentsTextarea').value.trim();
+            return true;
+          }
+          return false;
+        }
+        if (type === 'name') {
+          const fn = document.getElementById('firstName').value.trim();
+          const ln = document.getElementById('lastName').value.trim();
+          const fnOk = fn.length > 0;
+          const lnOk = ln.length > 0;
+          setInvalid('firstNameField', !fnOk);
+          setInvalid('lastNameField', !lnOk);
+          if (fnOk) formData.firstName = fn;
+          if (lnOk) formData.lastName = ln;
+          return fnOk && lnOk;
+        }
+        if (type === 'contact') {
+          const phone = document.getElementById('phone').value.trim();
+          const email = document.getElementById('email').value.trim();
+          const phoneOk = phone.replace(/\D/g, '').length >= 10;
+          const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+          setInvalid('phoneField', !phoneOk);
+          setInvalid('emailField', !emailOk);
+          if (phoneOk) formData.phone = phone;
+          if (emailOk) formData.email = email;
+          return phoneOk && emailOk;
+        }
+        return true;
+      }
+
+      document.querySelectorAll('[data-next]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const type = btn.dataset.validate;
+          if (type && !validateStep(type)) return;
+          const map = { 1: 2, 3: 4, 4: 5 };
+          const next = map[currentStep];
+          if (next === 5) renderSummary();
+          goToStep(next);
+        });
+      });
+
+      function renderSummary() {
+        const box = document.getElementById('summaryBox');
+        box.innerHTML = `
+    <strong>System:</strong> ${formData.systemType || '—'} &nbsp;|&nbsp; <strong>Service:</strong> ${formData.serviceType || '—'}<br>
+    <strong>ZIP:</strong> ${formData.zip || '—'}<br>
+    <strong>Property:</strong> ${formData.propertyStatus === 'business' ? 'Commercial / Business' : 'Home / Residence'}<br>
+    <strong>Timing:</strong> ${formData.timing || '—'}<br>
+    <strong>Name:</strong> ${formData.firstName || ''} ${formData.lastName || ''}<br>
+    <strong>Phone:</strong> ${formData.phone || '—'} &nbsp;|&nbsp; <strong>Email:</strong> ${formData.email || '—'}
+  `;
+      }
+
+      const TCPA_COMPLIANCE_TEXT =
+        'By checking this box and clicking "Get My Free Estimate," I agree ' +
+        'to be contacted by Air Conditioner Lab and up to 3 matched service ' +
+        'professionals via phone, text, and email — including by autodialer ' +
+        'and prerecorded messages — at the number and email provided, even ' +
+        'if listed on a Do Not Call registry. Consent is not a condition of ' +
+        'purchase. Message/data rates may apply.';
+
+      const submitBtn = document.getElementById('submitBtn');
+      const submitError = document.getElementById('submitError');
+
+      function showSubmitError(message) {
+        submitError.textContent = message;
+        submitError.style.display = 'block';
+      }
+
+      submitBtn.addEventListener('click', async () => {
+        const consent = document.getElementById('consentCheck').checked;
+        document.getElementById('consentError').style.display = consent
+          ? 'none'
+          : 'block';
+        if (!consent) return;
+
+        submitError.style.display = 'none';
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting…';
+
+        try {
+          const res = await fetch('/api/leads/ping-post', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              f_name: formData.firstName,
+              l_name: formData.lastName,
+              zipcode: formData.zip,
+              task_id: formData.taskId,
+              phone: formData.phone,
+              email: formData.email,
+              tcpa_compliance_text: TCPA_COMPLIANCE_TEXT,
+              is_business: formData.propertyStatus === 'business' ? 1 : 0,
+              comments: `System: ${formData.systemType || 'N/A'}. Service: ${formData.serviceType || 'N/A'}. Comments: ${formData.comments || 'N/A'}. Timing: ${formData.timing || 'N/A'}.`,
+            }),
+          });
+
+          const data = await res.json().catch(() => ({}));
+
+          if (!res.ok) {
+            // Prefer a human-readable upstream message when Networx rejects the
+            // lead (e.g. "Missing Trusted Form"), then our own validation error.
+            const reason = data.errorMessage || data.error;
+            throw new Error(
+              reason || 'Something went wrong. Please try again.',
+            );
+          }
+
+          currentStep = 'success';
+          document
+            .querySelectorAll('.step')
+            .forEach((s) => s.classList.remove('active'));
+          stepEls['success'].classList.add('active');
+          updateProgress();
+        } catch (err) {
+          showSubmitError(
+            err.message || 'Something went wrong. Please try again.',
+          );
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Get My Free Estimate';
+        }
+      });
+
+      /* Retake the quiz — clears all answers and returns to step 1 */
+      document.getElementById('retakeBtn').addEventListener('click', () => {
+        Object.keys(formData).forEach((key) => delete formData[key]);
+
+        document.querySelectorAll('.option-btn.selected').forEach((btn) => {
+          btn.classList.remove('selected');
+        });
+        [
+          'zipInput',
+          'systemTypeSelect',
+          'serviceTypeSelect',
+          'commentsTextarea',
+          'locationTypeSelect',
+          'firstName',
+          'lastName',
+          'phone',
+          'email',
+          'zipFallbackInput',
+        ].forEach((id) => {
+          const el = document.getElementById(id);
+          if (el) el.value = '';
+        });
+        document.getElementById('serviceTypeField').style.display = 'none';
+        document.getElementById('consentCheck').checked = false;
+        document.getElementById('consentError').style.display = 'none';
+        submitError.style.display = 'none';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Get My Free Estimate';
+        [
+          'zipField',
+          'systemTypeField',
+          'serviceTypeField',
+          'locationTypeField',
+          'firstNameField',
+          'lastNameField',
+          'phoneField',
+          'emailField',
+        ].forEach((id) => setInvalid(id, false));
+
+        document
+          .querySelectorAll('.step')
+          .forEach((s) => s.classList.remove('active'));
+        currentStep = 1;
+        stepEls[1].classList.add('active');
+        updateProgress();
+        quizStage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+
+      // Dropdown Options Mapping for Networx Task IDs
+      const serviceOptions = {
+        'Air Conditioning': [
+          { text: 'Central A/C - Install/Replace', value: '27' },
+          { text: 'Central A/C - Repair/Service', value: '26' },
+          { text: 'Ductless (mini-split) A/C Install', value: '34' },
+          { text: 'Ductless (mini-split) A/C Service or Repair', value: '365' },
+          { text: 'Swamp Cooler Install or Replace', value: '495' },
+          { text: 'Swamp Cooler Repair Services', value: '493' },
+          { text: 'Thermostat - Install/Replace', value: '31' },
+          { text: 'HVAC Ducts/Vents - Clean', value: '20' },
+          { text: 'HVAC Ducts/Vents - Install/Replace', value: '19' }
+        ],
+        'Heating & Furnace Systems': [
+          { text: 'Boiler Install/Replace', value: '24' },
+          { text: 'Boiler Repair/Service', value: '25' },
+          { text: 'Electric Furnace - Install', value: '435' },
+          { text: 'Electric Furnace - Repair', value: '441' },
+          { text: 'Electrical Baseboard/Wall Heater - Install', value: '32' },
+          { text: 'Electrical Baseboard/Wall Heater - Repair', value: '33' },
+          { text: 'Gas Furnace - Install', value: '437' },
+          { text: 'Gas Furnace - Repair', value: '443' },
+          { text: 'Heat Pump Install', value: '29' },
+          { text: 'Heat Pump Repair', value: '30' },
+          { text: 'Oil Furnace - Install', value: '439' },
+          { text: 'Oil Furnace - Repair', value: '445' },
+          { text: 'Propane Furnace - Install', value: '447' },
+          { text: 'Propane Furnace - Repair', value: '449' },
+          { text: 'Humidifier/Dehumidifier - Install', value: '373' },
+          { text: 'Humidifier/Dehumidifier - Repair', value: '375' },
+          { text: 'Thermostat - Install/Replace', value: '31' },
+          { text: 'HVAC Ducts/Vents - Clean', value: '20' },
+          { text: 'HVAC Ducts/Vents - Install/Replace', value: '19' }
+        ],
+        'Other': [
+          { text: 'Thermostat - Install/Replace', value: '31' },
+          { text: 'HVAC Ducts/Vents - Clean', value: '20' },
+          { text: 'HVAC Ducts/Vents - Install/Replace', value: '19' },
+          { text: 'General HVAC Service', value: '12' }
+        ]
+      };
+
+      const systemTypeSelect = document.getElementById('systemTypeSelect');
+      const serviceTypeField = document.getElementById('serviceTypeField');
+      const serviceTypeSelect = document.getElementById('serviceTypeSelect');
+
+      systemTypeSelect.addEventListener('change', () => {
+        const val = systemTypeSelect.value;
+        serviceTypeSelect.innerHTML = '<option value="">Select service type...</option>';
+        if (val && serviceOptions[val]) {
+          serviceOptions[val].forEach(opt => {
+            const el = document.createElement('option');
+            el.value = opt.value;
+            el.textContent = opt.text;
+            serviceTypeSelect.appendChild(el);
+          });
+          serviceTypeField.style.display = 'block';
+        } else {
+          serviceTypeField.style.display = 'none';
+        }
+        setInvalid('systemTypeField', false);
+      });
+
+      serviceTypeSelect.addEventListener('change', () => {
+        setInvalid('serviceTypeField', false);
+      });
+      
+      document.getElementById('locationTypeSelect').addEventListener('change', () => {
+        setInvalid('locationTypeField', false);
+      });
+      
+      document.getElementById('zipInput').addEventListener('input', () => {
+        setInvalid('zipField', false);
+      });
+
+      /* =========================================================
+   FULL SCREEN FOCUS MODE — puts the quiz stage into the
+   browser's real Fullscreen API. While active, the fullscreen
+   element (and only that element's contents) fills the entire
+   screen — no header, hero, or footer are visible.
+========================================================= */
+      const quizStage = document.getElementById('quizStage');
+      const focusToggle = document.getElementById('focusToggle');
+
+      function getFullscreenElement() {
+        return (
+          document.fullscreenElement || document.webkitFullscreenElement || null
+        );
+      }
+
+      function requestFs(el) {
+        const fn =
+          el.requestFullscreen ||
+          el.webkitRequestFullscreen ||
+          el.webkitRequestFullScreen;
+        if (fn) return fn.call(el);
+        return Promise.reject(new Error('Fullscreen API not supported'));
+      }
+
+      function exitFs() {
+        const fn =
+          document.exitFullscreen ||
+          document.webkitExitFullscreen ||
+          document.webkitCancelFullScreen;
+        if (fn) return fn.call(document);
+        return Promise.resolve();
+      }
+
+      focusToggle.addEventListener('click', () => {
+        if (getFullscreenElement() === quizStage) {
+          exitFs();
+        } else {
+          requestFs(quizStage).catch(() => {
+            // Fullscreen API unavailable/blocked — fall back to scrolling
+            // the quiz into view so it's still the focus of the screen.
+            quizStage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
+        }
+      });
+
+      function syncFocusToggleUI() {
+        const active = getFullscreenElement() === quizStage;
+        focusToggle.classList.toggle('active', active);
+        focusToggle.querySelector('.fs-label').textContent = active
+          ? 'Exit focus mode'
+          : 'Focus mode';
+        focusToggle.setAttribute(
+          'aria-label',
+          active
+            ? 'Exit full screen focus mode'
+            : 'Enter full screen focus mode',
+        );
+      }
+      document.addEventListener('fullscreenchange', syncFocusToggleUI);
+      document.addEventListener('webkitfullscreenchange', syncFocusToggleUI);
+    </script>
+  </body>
+</html>
