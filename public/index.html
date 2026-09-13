@@ -1557,6 +1557,18 @@
                 <div class="step" data-step="4">
                   <h2 class="step-title">Where should we send your matches?</h2>
                   <p class="step-sub">Local pros will reach out directly.</p>
+                  <div class="field" id="addressField">
+                    <label for="address">Homeowner Street Address</label>
+                    <input
+                      type="text"
+                      id="address"
+                      autocomplete="street-address"
+                      placeholder="e.g. 123 Main St"
+                    />
+                    <div class="field-error">
+                      Please enter your street address.
+                    </div>
+                  </div>
                   <div class="field" id="phoneField">
                     <label for="phone">Phone number</label>
                     <input
@@ -2248,15 +2260,19 @@
           return fnOk && lnOk;
         }
         if (type === 'contact') {
+          const address = document.getElementById('address').value.trim();
           const phone = document.getElementById('phone').value.trim();
           const email = document.getElementById('email').value.trim();
+          const addressOk = address.length > 0;
           const phoneOk = phone.replace(/\D/g, '').length >= 10;
           const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+          setInvalid('addressField', !addressOk);
           setInvalid('phoneField', !phoneOk);
           setInvalid('emailField', !emailOk);
+          if (addressOk) formData.address = address;
           if (phoneOk) formData.phone = phone;
           if (emailOk) formData.email = email;
-          return phoneOk && emailOk;
+          return addressOk && phoneOk && emailOk;
         }
         return true;
       }
@@ -2276,7 +2292,7 @@
         const box = document.getElementById('summaryBox');
         box.innerHTML = `
     <strong>System:</strong> ${formData.systemType || '—'} &nbsp;|&nbsp; <strong>Service:</strong> ${formData.serviceType || '—'}<br>
-    <strong>ZIP:</strong> ${formData.zip || '—'}<br>
+    <strong>Address:</strong> ${formData.address || '—'} &nbsp;|&nbsp; <strong>ZIP:</strong> ${formData.zip || '—'}<br>
     <strong>Property:</strong> ${formData.propertyStatus === 'business' ? 'Commercial / Business' : 'Home / Residence'}<br>
     <strong>Timing:</strong> ${formData.timing || '—'}<br>
     <strong>Name:</strong> ${formData.firstName || ''} ${formData.lastName || ''}<br>
@@ -2318,6 +2334,7 @@
             body: JSON.stringify({
               f_name: formData.firstName,
               l_name: formData.lastName,
+              address: formData.address,
               zipcode: formData.zip,
               task_id: formData.taskId,
               phone: formData.phone,
@@ -2370,6 +2387,7 @@
           'locationTypeSelect',
           'firstName',
           'lastName',
+          'address',
           'phone',
           'email',
           'zipFallbackInput',
@@ -2390,6 +2408,7 @@
           'locationTypeField',
           'firstNameField',
           'lastNameField',
+          'addressField',
           'phoneField',
           'emailField',
         ].forEach((id) => setInvalid(id, false));
@@ -2474,8 +2493,12 @@
         setInvalid('locationTypeField', false);
       });
       
-      document.getElementById('zipInput').addEventListener('input', () => {
-        setInvalid('zipField', false);
+      ['zipInput', 'address', 'firstName', 'lastName', 'phone', 'email'].forEach((id) => {
+        const fieldId = id === 'zipInput' ? 'zipField' : id + 'Field';
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener('input', () => setInvalid(fieldId, false));
+        }
       });
 
       /* =========================================================
