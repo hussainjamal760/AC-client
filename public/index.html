@@ -2435,35 +2435,7 @@
         submitBtn.textContent = 'Submitting…';
 
         try {
-          // ─── TRUSTEDFORM DIAGNOSTIC ───────────────────────────────────────
-          console.group('[TrustedForm] Diagnostic at submit time');
 
-          // 1. Scan ALL TrustedForm-related inputs on the entire page
-          const allTfInputs = document.querySelectorAll(
-            'input[name*="TrustedForm"], input[id*="TrustedForm"], input[name*="xxTrusted"]'
-          );
-          console.log('All TrustedForm inputs found on page:', allTfInputs.length);
-          allTfInputs.forEach((el, i) =>
-            console.log(`  [${i}] id="${el.id}" name="${el.name}" value="${el.value}"`)
-          );
-
-          // 2. Target the specific field we want
-          const _tfCertEl =
-            document.getElementById('xxTrustedFormCertUrl') ||
-            document.querySelector('input[name="xxTrustedFormCertUrl"]') ||
-            document.querySelector('input[id^="xxTrustedFormCertUrl"]') ||
-            document.querySelector('input[name*="TrustedForm"]');
-          const _tfCertVal = (_tfCertEl && _tfCertEl.value) ? _tfCertEl.value : undefined;
-
-          if (_tfCertVal) {
-            console.log('✅ cert_url resolved:', _tfCertVal);
-          } else {
-            console.error('❌ cert_url is EMPTY. TrustedForm script likely blocked by CSP or adblocker.');
-            console.log('  Check Network tab for cdn.trustedform.com request status.');
-            console.log('  If blocked: disable adblocker OR open http://localhost:3000 (not Live Server).');
-          }
-          console.groupEnd();
-          // ─────────────────────────────────────────────────────────────────
 
           // Sync DOM fields to formData if missing (e.g. autofilled or script injected)
           const zipVal = (formData.zip || (document.getElementById('zipInput') ? document.getElementById('zipInput').value.trim() : '') || '30301');
@@ -2514,7 +2486,6 @@
           });
 
           const data = await res.json().catch(() => ({}));
-          console.log('[Ping-Post Response]', res.status, data);
 
           if (!res.ok) {
             // Prefer detailed validation error list if available, then upstream message or error string
@@ -2522,7 +2493,6 @@
             if (data.details && Array.isArray(data.details) && data.details.length > 0) {
               reason = data.details.map((d) => `${d.path || d.param}: ${d.msg}`).join('. ');
             }
-            console.error('❌ Ping-Post API Error:', res.status, data);
             throw new Error(
               reason || 'Something went wrong. Please try again.',
             );
