@@ -12,7 +12,12 @@ const { XMLParser } = require('fast-xml-parser');
 const { body, query, validationResult } = require('express-validator');
 
 const api = axios.create({
-  timeout: 10000,
+  timeout: 25000,
+  headers: {
+    'User-Agent':
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    Accept: 'application/xml, text/xml, */*; q=0.01',
+  },
   validateStatus: () => true,
 });
 
@@ -118,7 +123,7 @@ const xmlParser = new XMLParser({ ignoreAttributes: true, trimValues: true });
  * nx_access_key / nx_userId are always injected server-side and can never be
  * overridden by caller-supplied params.
  */
-async function networxRequest(params) {
+async function networxRequest(params, retries = 1) {
   const cleanParams = {
     ...params,
     nx_access_key: NX_ACCESS_KEY,
@@ -136,26 +141,38 @@ async function networxRequest(params) {
     }
   });
 
-  const response = await api.get(NX_API_BASE_URL, {
-    params: cleanParams,
-    timeout: 10000,
-    // Networx expects array fields as name[] / name[0], name[1]... axios does
-    // this by default for arrays (repeats the key), which matches their docs.
-    paramsSerializer: { indexes: null },
-    validateStatus: () => true, // we handle non-2xx ourselves below
-  });
-
-  let parsed = {};
   try {
-    const result = xmlParser.parse(response.data);
-    parsed = result?.affiliateResponse || { raw: response.data };
-  } catch (e) {
-    // Networx returned something that wasn't XML (e.g. a plain-text auth
-    // rejection) - surface the raw body instead of silently returning {}.
-    parsed = { raw: response.data };
-  }
+    const response = await api.get(NX_API_BASE_URL, {
+      params: cleanParams,
+      timeout: 25000,
+      // Networx expects array fields as name[] / name[0], name[1]... axios does
+      // this by default for arrays (repeats the key), which matches their docs.
+      paramsSerializer: { indexes: null },
+      validateStatus: () => true, // we handle non-2xx ourselves below
+    });
 
-  return { httpStatus: response.status, data: parsed };
+    let parsed = {};
+    try {
+      const result = xmlParser.parse(response.data);
+      parsed = result?.affiliateResponse || { raw: response.data };
+    } catch (e) {
+      // Networx returned something that wasn't XML (e.g. a plain-text auth
+      // rejection) - surface the raw body instead of silently returning {}.
+      parsed = { raw: response.data };
+    }
+
+    return { httpStatus: response.status, data: parsed };
+  } catch (err) {
+    if (
+      retries > 0 &&
+      (err.code === 'ECONNABORTED' || err.message?.includes('timeout'))
+    ) {
+      console.warn('[WARN] Networx API timeout, retrying once...');
+      await new Promise((r) => setTimeout(r, 500));
+      return networxRequest(params, retries - 1);
+    }
+    throw err;
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -197,7 +214,11 @@ app.use(
 );
 app.use(
   cors({
-    origin: ALLOWED_ORIGINS.length > 0 ? ALLOWED_ORIGINS : false,
+    origin: (origin, callback) => {
+      if (!origin || NODE_ENV !== 'production') return callback(null, true);
+      if (ALLOWED_ORIGINS.includes(origin)) return callback(null, true);
+      return callback(null, false);
+    },
     methods: ['GET', 'POST'],
   }),
 );
@@ -249,9 +270,13 @@ app.use('/api', requireInternalKey);
 function handleValidation(req, res, next) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
+    const errorArray = errors.array();
+    const detailMsg = errorArray
+      .map((e) => `${e.path || e.param}: ${e.msg}`)
+      .join('; ');
     return res
       .status(400)
-      .json({ error: 'Validation failed', details: errors.array() });
+      .json({ error: `Validation failed: ${detailMsg}`, details: errorArray });
   }
   next();
 }
@@ -263,7 +288,14 @@ const zipcodeValidator = body('zipcode')
 
 const phoneValidator = (field, optional = false) => {
   const chain = body(field)
-    .customSanitizer((v) => (typeof v === 'string' ? v.replace(/\D/g, '') : v))
+    .customSanitizer((v) => {
+      if (typeof v !== 'string') return v;
+      let digits = v.replace(/\D/g, '');
+      if (digits.length === 11 && digits.startsWith('1')) {
+        digits = digits.slice(1);
+      }
+      return digits;
+    })
     .matches(/^\d{10}$/)
     .withMessage(`${field} must be a 10-digit phone number`);
   return optional ? chain.optional({ values: 'falsy' }) : chain;
@@ -711,9 +743,12 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
   console.error('[ERROR]', err.message);
   if (axios.isAxiosError(err)) {
-    return res
-      .status(502)
-      .json({ error: 'Upstream Networx API request failed.' });
+    const isTimeout =
+      err.code === 'ECONNABORTED' || err.message?.includes('timeout');
+    const msg = isTimeout
+      ? 'Upstream Networx API timed out. Please try again.'
+      : `Upstream Networx API request failed: ${err.message}`;
+    return res.status(502).json({ error: msg });
   }
   const message =
     NODE_ENV === 'production' ? 'Internal server error' : err.message;

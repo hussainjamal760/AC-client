@@ -1353,16 +1353,16 @@
                   </p>
                   
                   <div class="field" id="zipField">
-                    <label for="zipInput">ZIP code</label>
+                    <label for="zipInput">US ZIP code <span style="font-weight: 500; font-size: 12.5px; color: var(--ink-soft);">(US only, e.g. 30301, 90210)</span></label>
                     <input
                       type="text"
                       id="zipInput"
                       inputmode="numeric"
-                      maxlength="10"
+                      maxlength="5"
                       placeholder="e.g. 30301"
                       autocomplete="postal-code"
                     />
-                    <div class="field-error">Please enter your ZIP code.</div>
+                    <div class="field-error">Please enter a valid 5-digit US ZIP code.</div>
                   </div>
 
                   <div class="field" id="systemTypeField">
@@ -2264,13 +2264,17 @@
           const phone = document.getElementById('phone').value.trim();
           const email = document.getElementById('email').value.trim();
           const addressOk = address.length > 0;
-          const phoneOk = phone.replace(/\D/g, '').length >= 10;
+          let digits = phone.replace(/\D/g, '');
+          if (digits.length === 11 && digits.startsWith('1')) {
+            digits = digits.slice(1);
+          }
+          const phoneOk = digits.length === 10;
           const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
           setInvalid('addressField', !addressOk);
           setInvalid('phoneField', !phoneOk);
           setInvalid('emailField', !emailOk);
           if (addressOk) formData.address = address;
-          if (phoneOk) formData.phone = phone;
+          if (phoneOk) formData.phone = digits;
           if (emailOk) formData.email = email;
           return addressOk && phoneOk && emailOk;
         }
@@ -2316,6 +2320,16 @@
         submitError.style.display = 'block';
       }
 
+      function getApiBaseUrl() {
+        if (
+          window.location.protocol === 'file:' ||
+          ['5500', '5501', '8080', '5173'].includes(window.location.port)
+        ) {
+          return 'http://localhost:3000';
+        }
+        return '';
+      }
+
       submitBtn.addEventListener('click', async () => {
         const consent = document.getElementById('consentCheck').checked;
         document.getElementById('consentError').style.display = consent
@@ -2328,7 +2342,7 @@
         submitBtn.textContent = 'Submitting…';
 
         try {
-          const res = await fetch('/api/leads/ping-post', {
+          const res = await fetch(`${getApiBaseUrl()}/api/leads/ping-post`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -2348,9 +2362,11 @@
           const data = await res.json().catch(() => ({}));
 
           if (!res.ok) {
-            // Prefer a human-readable upstream message when Networx rejects the
-            // lead (e.g. "Missing Trusted Form"), then our own validation error.
-            const reason = data.errorMessage || data.error;
+            // Prefer detailed validation error list if available, then upstream message or error string
+            let reason = data.errorMessage || data.error;
+            if (data.details && Array.isArray(data.details) && data.details.length > 0) {
+              reason = data.details.map((d) => d.msg).join('. ');
+            }
             throw new Error(
               reason || 'Something went wrong. Please try again.',
             );
