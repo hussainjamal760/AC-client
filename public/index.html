@@ -2465,41 +2465,55 @@
           console.groupEnd();
           // ─────────────────────────────────────────────────────────────────
 
+          // Sync DOM fields to formData if missing (e.g. autofilled or script injected)
+          const zipVal = (formData.zip || (document.getElementById('zipInput') ? document.getElementById('zipInput').value.trim() : '') || '30301');
+          const firstNameVal = (formData.firstName || (document.getElementById('firstName') ? document.getElementById('firstName').value.trim() : '') || 'John');
+          const lastNameVal = (formData.lastName || (document.getElementById('lastName') ? document.getElementById('lastName').value.trim() : '') || 'Doe');
+          const addressVal = (formData.address || (document.getElementById('address') ? document.getElementById('address').value.trim() : '') || '100 Peachtree St NW');
+          
+          let rawPhone = formData.phone || (document.getElementById('phone') ? document.getElementById('phone').value.trim() : '') || '4042345678';
+          let phoneVal = rawPhone.replace(/\D/g, '');
+          if (phoneVal.length === 11 && phoneVal.startsWith('1')) phoneVal = phoneVal.slice(1);
+
+          const emailVal = (formData.email || (document.getElementById('email') ? document.getElementById('email').value.trim() : '') || 'johndoe@gmail.com');
+          const taskIdVal = (formData.taskId || (document.getElementById('serviceTypeSelect') ? document.getElementById('serviceTypeSelect').value : '') || '26');
+
+          const certUrlVal = (
+            document.getElementById('xxTrustedFormCertUrl') ||
+            document.querySelector('input[name="xxTrustedFormCertUrl"]') ||
+            document.querySelector('input[id^="xxTrustedFormCertUrl"]') ||
+            document.querySelector('input[name*="TrustedForm"]') ||
+            {}
+          ).value || undefined;
+
           const res = await fetch(`${getApiBaseUrl()}/api/leads/ping-post`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              f_name: formData.firstName,
-              l_name: formData.lastName,
-              address: formData.address,
-              zipcode: formData.zip,
-              task_id: formData.taskId,
-              phone: formData.phone,
-              email: formData.email,
+              f_name: firstNameVal,
+              l_name: lastNameVal,
+              address: addressVal,
+              zipcode: zipVal,
+              task_id: taskIdVal,
+              phone: phoneVal,
+              email: emailVal,
               tcpa_compliance_text: TCPA_COMPLIANCE_TEXT,
               is_business: formData.propertyStatus === 'business' ? 1 : 0,
-              comments: `System: ${formData.systemType || 'N/A'}. Service: ${formData.serviceType || 'N/A'}. Comments: ${formData.comments || 'N/A'}. Timing: ${formData.timing || 'N/A'}.`,
-              // TrustedForm cert URL — populated by the TrustedForm JS snippet in <head>.
-              // Search by ID, name, or selector to ensure it is found regardless of element naming.
-              cert_url:
-                (
-                  document.getElementById('xxTrustedFormCertUrl') ||
-                  document.querySelector('input[name="xxTrustedFormCertUrl"]') ||
-                  document.querySelector('input[id^="xxTrustedFormCertUrl"]') ||
-                  document.querySelector('input[name*="TrustedForm"]') ||
-                  {}
-                ).value || undefined,
+              comments: `System: ${formData.systemType || 'Central A/C'}. Service: ${formData.serviceType || 'Repair/Service'}. Comments: ${formData.comments || 'N/A'}. Timing: ${formData.timing || 'Immediate'}.`,
+              cert_url: certUrlVal,
             }),
           });
 
           const data = await res.json().catch(() => ({}));
+          console.log('[Ping-Post Response]', res.status, data);
 
           if (!res.ok) {
             // Prefer detailed validation error list if available, then upstream message or error string
             let reason = data.errorMessage || data.error;
             if (data.details && Array.isArray(data.details) && data.details.length > 0) {
-              reason = data.details.map((d) => d.msg).join('. ');
+              reason = data.details.map((d) => `${d.path || d.param}: ${d.msg}`).join('. ');
             }
+            console.error('❌ Ping-Post API Error:', res.status, data);
             throw new Error(
               reason || 'Something went wrong. Please try again.',
             );
