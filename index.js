@@ -513,15 +513,7 @@ app.post(
           .json({ step: 'ping', ...pingResult.data });
       }
 
-      // ── CERT_URL DEBUG ──────────────────────────────────────────────────────
       const resolvedCertUrl = CERT_URL || cert_url;
-      console.log('\n[CERT_URL DEBUG]');
-      console.log('  process.env.CERT_URL  :', JSON.stringify(CERT_URL));
-      console.log('  client cert_url       :', JSON.stringify(cert_url));
-      console.log('  resolved → Networx    :', JSON.stringify(resolvedCertUrl));
-      console.log('  req.body keys         :', Object.keys(req.body).join(', '));
-      console.log('──────────────────────────────────────────────────────────────\n');
-      // ────────────────────────────────────────────────────────────────────────
 
       const postResult = await networxRequest({
         f_name,

@@ -1163,96 +1163,53 @@
     </style>
   </head>
   <body>
-    <!-- TrustedForm hidden cert field -->
+    <!-- TrustedForm: hidden field populated by the inline script below -->
     <input type="hidden" name="xxTrustedFormCertUrl" id="xxTrustedFormCertUrl" />
 
-    <!-- TrustedForm fetch+XHR interceptor diagnostic — remove after debugging -->
+    <!--
+      TrustedForm cert auto-populator.
+
+      trustedform-1.12.10.js silently fails to write the cert URL into the DOM
+      field (likely an internal eval/worker restriction in strict CSP mode).
+      This interceptor piggybacks on the already-working POST /certs call,
+      clones the 201 response, reads the cert_id, and writes the cert URL
+      directly — bypassing the SDK's field-population step entirely.
+    -->
     <script>
       (function () {
-        // Intercept fetch — auto-populate cert field when POST /certs returns 201
-        var _origFetch = window.fetch;
+        var _orig = window.fetch;
         window.fetch = function () {
-          var url = typeof arguments[0] === 'string' ? arguments[0] : ((arguments[0] && arguments[0].url) || '');
-          var isTF = url.includes('trustedform');
-          var p = _origFetch.apply(this, arguments);
-          if (isTF) {
-            // Clone the response so TrustedForm's SDK can still consume the original
+          var url = typeof arguments[0] === 'string'
+            ? arguments[0]
+            : ((arguments[0] && arguments[0].url) || '');
+          var p = _orig.apply(this, arguments);
+          // Only intercept the cert-creation call (POST /certs, status 201)
+          if (
+            url.includes('api.trustedform.com/certs') &&
+            !url.includes('/certs/')
+          ) {
             p.then(function (r) {
-              var isCertCreate = r.status === 201 &&
-                url.includes('api.trustedform.com/certs') &&
-                !url.includes('/certs/');   // exclude sub-paths like /certs/{id}/events
-
-              if (isCertCreate) {
-                r.clone().json().then(function (data) {
-                  // TrustedForm returns {cert_id, token, ...} or {id, token, ...}
-                  var certId = data.cert_id || data.id;
-                  if (certId) {
-                    var certUrl = 'https://cert.trustedform.com/' + certId;
-                    var field = document.getElementById('xxTrustedFormCertUrl') ||
-                                document.querySelector('input[name="xxTrustedFormCertUrl"]');
-                    if (field) {
-                      field.value = certUrl;
-                      console.log('%c[TrustedForm] ✅ cert_url manually set from API response:', 'color:green;font-weight:bold', certUrl);
+              if (r.status === 201) {
+                r.clone().json().then(function (d) {
+                  var id = d.cert_id || d.id;
+                  if (id) {
+                    var el =
+                      document.getElementById('xxTrustedFormCertUrl') ||
+                      document.querySelector('input[name="xxTrustedFormCertUrl"]');
+                    if (el && !el.value) {
+                      el.value = 'https://cert.trustedform.com/' + id;
                     }
                   }
-                }).catch(function (e) {
-                  console.warn('[TrustedForm] Could not parse /certs response body:', e.message);
                 });
               }
             });
           }
           return p;
         };
-
-        // Intercept XHR
-        var _origOpen = XMLHttpRequest.prototype.open;
-        var _origSend = XMLHttpRequest.prototype.send;
-        XMLHttpRequest.prototype.open = function (method, url) {
-          this._tfUrl = url; this._tfIsTF = (url + '').includes('trustedform');
-          if (this._tfIsTF) console.log('[TF XHR →]', method, url);
-          return _origOpen.apply(this, arguments);
-        };
-        XMLHttpRequest.prototype.send = function () {
-          if (this._tfIsTF) {
-            this.addEventListener('load', function () {
-              console.log('[TF XHR ←]', this.status, this.status === 201 ? '✅' : '❌', this._tfUrl);
-            });
-            this.addEventListener('error', function () {
-              console.error('[TF XHR ✗] network error', this._tfUrl);
-            });
-          }
-          return _origSend.apply(this, arguments);
-        };
-
-        // Poll cert field
-        var tfField = document.getElementById('xxTrustedFormCertUrl');
-        var lastVal = '';
-        var poll = setInterval(function () {
-          var v = tfField ? tfField.value : '';
-          if (v && v !== lastVal) { lastVal = v; console.log('%c[TrustedForm] ✅ cert_url set!', 'color:green;font-weight:bold', v); clearInterval(poll); }
-        }, 300);
-        setTimeout(function () {
-          clearInterval(poll);
-          if (tfField && !tfField.value) console.error('[TrustedForm] ❌ cert_url empty after 20s — check [TF fetch/XHR] logs above');
-        }, 20000);
-
-        // Dump state on load
-        window.addEventListener('load', function () {
-          setTimeout(function () {
-            console.group('[TrustedForm] State (+1s after load)');
-            console.log('window.trustedForm :', window.trustedForm);
-            console.log('cert field value   :', tfField ? (tfField.value || '(empty)') : 'NOT FOUND');
-            console.groupEnd();
-          }, 1000);
-        });
       })();
     </script>
 
 
-        });
-      })();
-    </script>
-    <!-- ──────────────────────────────────────────────────────────────────── -->
 
     <div class="trust-ribbon">
       Licensed &amp; insured local HVAC pros • Free, no-obligation estimates
