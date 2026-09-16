@@ -198,7 +198,17 @@ app.use(
         // use nonces or external files.
         styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
         fontSrc: ["'self'", 'https://fonts.gstatic.com'],
-        scriptSrc: ["'self'", "'unsafe-inline'"],
+        // TrustedForm subdomains must ALL be allowed — the inline snippet in
+        // <head> loads from api.trustedform.com which redirects the actual
+        // bootstrap script to cdn.trustedform.com. CSP blocks at the FINAL
+        // URL, so both must be listed or cert_url is never populated and
+        // Networx rejects every lead with "Missing Trusted Form".
+        scriptSrc: [
+          "'self'",
+          "'unsafe-inline'",
+          'https://api.trustedform.com',
+          'https://cdn.trustedform.com',
+        ],
         imgSrc: ["'self'", 'data:'],
         connectSrc: [
           "'self'",
@@ -206,7 +216,15 @@ app.use(
           'https://ipapi.co',
           'https://api.zippopotam.us',
           'https://api.open-meteo.com',
+          // TrustedForm JS makes XHR/beacon callbacks to all three subdomains
+          'https://api.trustedform.com',
+          'https://cdn.trustedform.com',
+          'https://cert.trustedform.com',
         ],
+        // TrustedForm's trustedform-1.12.10.js creates a Web Worker from a
+        // data: URI for fraud/bot detection. Without worker-src allowing data:,
+        // CSP falls back to script-src which blocks data: and kills cert generation.
+        workerSrc: ["'self'", 'data:'],
         objectSrc: ["'none'"],
       },
     },
@@ -296,8 +314,18 @@ const phoneValidator = (field, optional = false) => {
       }
       return digits;
     })
-    .matches(/^\d{10}$/)
-    .withMessage(`${field} must be a 10-digit phone number`);
+    // Full NANP validation:
+    //   • Exactly 10 digits
+    //   • NPA (area code, digits 0-2) first digit must be 2-9
+    //   • NXX (exchange, digits 3-5) first digit must be 2-9
+    // This rejects Pakistani/non-US numbers (e.g. 3181792848 where
+    // NXX=179 has first digit 1) that Networx would refuse with "Invalid Data".
+    .custom((v) => {
+      if (!/^\d{10}$/.test(v)) throw new Error(`${field} must be a 10-digit US phone number`);
+      if (!/^[2-9]/.test(v)) throw new Error(`${field} area code must start with 2-9`);
+      if (!/^[2-9]/.test(v.slice(3))) throw new Error(`${field} exchange code must start with 2-9`);
+      return true;
+    });
   return optional ? chain.optional({ values: 'falsy' }) : chain;
 };
 
@@ -485,6 +513,16 @@ app.post(
           .json({ step: 'ping', ...pingResult.data });
       }
 
+      // ── CERT_URL DEBUG ──────────────────────────────────────────────────────
+      const resolvedCertUrl = CERT_URL || cert_url;
+      console.log('\n[CERT_URL DEBUG]');
+      console.log('  process.env.CERT_URL  :', JSON.stringify(CERT_URL));
+      console.log('  client cert_url       :', JSON.stringify(cert_url));
+      console.log('  resolved → Networx    :', JSON.stringify(resolvedCertUrl));
+      console.log('  req.body keys         :', Object.keys(req.body).join(', '));
+      console.log('──────────────────────────────────────────────────────────────\n');
+      // ────────────────────────────────────────────────────────────────────────
+
       const postResult = await networxRequest({
         f_name,
         l_name,
@@ -493,7 +531,7 @@ app.post(
         phone,
         email,
         tcpa_compliance_text,
-        cert_url: CERT_URL || cert_url,
+        cert_url: resolvedCertUrl,
         token,
         comments,
         address,

@@ -14,6 +14,31 @@
       href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <!-- TrustedForm: captures a real certificate URL (cert_url) for every
+         page visit. Required by Networx for lead post verification.
+         DO NOT remove — without this Networx rejects the lead post. -->
+    <script type="text/javascript">
+      (function () {
+        var field = 'xxTrustedFormCertUrl';
+        var provideReferrer = false;
+        var invertFieldSensitivity = false;
+        var tf = document.createElement('script');
+        tf.type = 'text/javascript';
+        tf.async = true;
+        tf.src =
+          'https://api.trustedform.com/trustedform.js?provide_referrer=' +
+          escape(provideReferrer) +
+          '&field=' +
+          escape(field) +
+          '&l=' +
+          new Date().getTime() +
+          Math.random() +
+          '&invert_field_sensitivity=' +
+          invertFieldSensitivity;
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(tf, s);
+      })();
+    </script>
     <style>
       :root {
         --bg: #f5f8fb;
@@ -1138,6 +1163,97 @@
     </style>
   </head>
   <body>
+    <!-- TrustedForm hidden cert field -->
+    <input type="hidden" name="xxTrustedFormCertUrl" id="xxTrustedFormCertUrl" />
+
+    <!-- TrustedForm fetch+XHR interceptor diagnostic — remove after debugging -->
+    <script>
+      (function () {
+        // Intercept fetch — auto-populate cert field when POST /certs returns 201
+        var _origFetch = window.fetch;
+        window.fetch = function () {
+          var url = typeof arguments[0] === 'string' ? arguments[0] : ((arguments[0] && arguments[0].url) || '');
+          var isTF = url.includes('trustedform');
+          var p = _origFetch.apply(this, arguments);
+          if (isTF) {
+            // Clone the response so TrustedForm's SDK can still consume the original
+            p.then(function (r) {
+              var isCertCreate = r.status === 201 &&
+                url.includes('api.trustedform.com/certs') &&
+                !url.includes('/certs/');   // exclude sub-paths like /certs/{id}/events
+
+              if (isCertCreate) {
+                r.clone().json().then(function (data) {
+                  // TrustedForm returns {cert_id, token, ...} or {id, token, ...}
+                  var certId = data.cert_id || data.id;
+                  if (certId) {
+                    var certUrl = 'https://cert.trustedform.com/' + certId;
+                    var field = document.getElementById('xxTrustedFormCertUrl') ||
+                                document.querySelector('input[name="xxTrustedFormCertUrl"]');
+                    if (field) {
+                      field.value = certUrl;
+                      console.log('%c[TrustedForm] ✅ cert_url manually set from API response:', 'color:green;font-weight:bold', certUrl);
+                    }
+                  }
+                }).catch(function (e) {
+                  console.warn('[TrustedForm] Could not parse /certs response body:', e.message);
+                });
+              }
+            });
+          }
+          return p;
+        };
+
+        // Intercept XHR
+        var _origOpen = XMLHttpRequest.prototype.open;
+        var _origSend = XMLHttpRequest.prototype.send;
+        XMLHttpRequest.prototype.open = function (method, url) {
+          this._tfUrl = url; this._tfIsTF = (url + '').includes('trustedform');
+          if (this._tfIsTF) console.log('[TF XHR →]', method, url);
+          return _origOpen.apply(this, arguments);
+        };
+        XMLHttpRequest.prototype.send = function () {
+          if (this._tfIsTF) {
+            this.addEventListener('load', function () {
+              console.log('[TF XHR ←]', this.status, this.status === 201 ? '✅' : '❌', this._tfUrl);
+            });
+            this.addEventListener('error', function () {
+              console.error('[TF XHR ✗] network error', this._tfUrl);
+            });
+          }
+          return _origSend.apply(this, arguments);
+        };
+
+        // Poll cert field
+        var tfField = document.getElementById('xxTrustedFormCertUrl');
+        var lastVal = '';
+        var poll = setInterval(function () {
+          var v = tfField ? tfField.value : '';
+          if (v && v !== lastVal) { lastVal = v; console.log('%c[TrustedForm] ✅ cert_url set!', 'color:green;font-weight:bold', v); clearInterval(poll); }
+        }, 300);
+        setTimeout(function () {
+          clearInterval(poll);
+          if (tfField && !tfField.value) console.error('[TrustedForm] ❌ cert_url empty after 20s — check [TF fetch/XHR] logs above');
+        }, 20000);
+
+        // Dump state on load
+        window.addEventListener('load', function () {
+          setTimeout(function () {
+            console.group('[TrustedForm] State (+1s after load)');
+            console.log('window.trustedForm :', window.trustedForm);
+            console.log('cert field value   :', tfField ? (tfField.value || '(empty)') : 'NOT FOUND');
+            console.groupEnd();
+          }, 1000);
+        });
+      })();
+    </script>
+
+
+        });
+      })();
+    </script>
+    <!-- ──────────────────────────────────────────────────────────────────── -->
+
     <div class="trust-ribbon">
       Licensed &amp; insured local HVAC pros • Free, no-obligation estimates
     </div>
@@ -2264,14 +2380,34 @@
           const phone = document.getElementById('phone').value.trim();
           const email = document.getElementById('email').value.trim();
           const addressOk = address.length > 0;
+
+          // Normalize to 10-digit NANP (strip leading country-code 1)
           let digits = phone.replace(/\D/g, '');
           if (digits.length === 11 && digits.startsWith('1')) {
             digits = digits.slice(1);
           }
-          const phoneOk = digits.length === 10;
+
+          // Full NANP check:
+          //   • Exactly 10 digits
+          //   • Area code (NPA) first digit must be 2–9
+          //   • Exchange code (NXX) first digit must be 2–9
+          // This catches Pakistani/non-US numbers like 3181792848 where
+          // NXX=179 is invalid (first digit 1), and Networx would reject them.
+          const nanpOk =
+            digits.length === 10 &&
+            /^[2-9]/.test(digits) &&        // area code first digit 2-9
+            /^[2-9]/.test(digits.slice(3)); // NXX first digit 2-9
+          const phoneOk = nanpOk;
+
           const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
           setInvalid('addressField', !addressOk);
           setInvalid('phoneField', !phoneOk);
+          if (!phoneOk && digits.length > 0) {
+            // Surface a clear error so user knows we need a US number
+            const el = document.getElementById('phoneField');
+            const hint = el && el.querySelector('.field-hint');
+            if (hint) hint.textContent = 'Please enter a valid US phone number.';
+          }
           setInvalid('emailField', !emailOk);
           if (addressOk) formData.address = address;
           if (phoneOk) formData.phone = digits;
@@ -2342,6 +2478,36 @@
         submitBtn.textContent = 'Submitting…';
 
         try {
+          // ─── TRUSTEDFORM DIAGNOSTIC ───────────────────────────────────────
+          console.group('[TrustedForm] Diagnostic at submit time');
+
+          // 1. Scan ALL TrustedForm-related inputs on the entire page
+          const allTfInputs = document.querySelectorAll(
+            'input[name*="TrustedForm"], input[id*="TrustedForm"], input[name*="xxTrusted"]'
+          );
+          console.log('All TrustedForm inputs found on page:', allTfInputs.length);
+          allTfInputs.forEach((el, i) =>
+            console.log(`  [${i}] id="${el.id}" name="${el.name}" value="${el.value}"`)
+          );
+
+          // 2. Target the specific field we want
+          const _tfCertEl =
+            document.getElementById('xxTrustedFormCertUrl') ||
+            document.querySelector('input[name="xxTrustedFormCertUrl"]') ||
+            document.querySelector('input[id^="xxTrustedFormCertUrl"]') ||
+            document.querySelector('input[name*="TrustedForm"]');
+          const _tfCertVal = (_tfCertEl && _tfCertEl.value) ? _tfCertEl.value : undefined;
+
+          if (_tfCertVal) {
+            console.log('✅ cert_url resolved:', _tfCertVal);
+          } else {
+            console.error('❌ cert_url is EMPTY. TrustedForm script likely blocked by CSP or adblocker.');
+            console.log('  Check Network tab for cdn.trustedform.com request status.');
+            console.log('  If blocked: disable adblocker OR open http://localhost:3000 (not Live Server).');
+          }
+          console.groupEnd();
+          // ─────────────────────────────────────────────────────────────────
+
           const res = await fetch(`${getApiBaseUrl()}/api/leads/ping-post`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -2356,6 +2522,16 @@
               tcpa_compliance_text: TCPA_COMPLIANCE_TEXT,
               is_business: formData.propertyStatus === 'business' ? 1 : 0,
               comments: `System: ${formData.systemType || 'N/A'}. Service: ${formData.serviceType || 'N/A'}. Comments: ${formData.comments || 'N/A'}. Timing: ${formData.timing || 'N/A'}.`,
+              // TrustedForm cert URL — populated by the TrustedForm JS snippet in <head>.
+              // Search by ID, name, or selector to ensure it is found regardless of element naming.
+              cert_url:
+                (
+                  document.getElementById('xxTrustedFormCertUrl') ||
+                  document.querySelector('input[name="xxTrustedFormCertUrl"]') ||
+                  document.querySelector('input[id^="xxTrustedFormCertUrl"]') ||
+                  document.querySelector('input[name*="TrustedForm"]') ||
+                  {}
+                ).value || undefined,
             }),
           });
 
