@@ -208,8 +208,9 @@ app.use(
           "'unsafe-inline'",
           'https://api.trustedform.com',
           'https://cdn.trustedform.com',
+          'https://connect.facebook.net',
         ],
-        imgSrc: ["'self'", 'data:'],
+        imgSrc: ["'self'", 'data:', 'https://www.facebook.com'],
         connectSrc: [
           "'self'",
           'https://ipwho.is',
@@ -220,6 +221,9 @@ app.use(
           'https://api.trustedform.com',
           'https://cdn.trustedform.com',
           'https://cert.trustedform.com',
+          // Meta Pixel tracking
+          'https://connect.facebook.net',
+          'https://www.facebook.com',
         ],
         // TrustedForm's trustedform-1.12.10.js creates a Web Worker from a
         // data: URI for fraud/bot detection. Without worker-src allowing data:,

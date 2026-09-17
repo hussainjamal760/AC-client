@@ -10,10 +10,23 @@
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <!-- Meta Pixel Code -->
+    <script>
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '39511333821798602');
+      fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=39511333821798602&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
     <!-- TrustedForm: captures a real certificate URL (cert_url) for every
          page visit. Required by Networx for lead post verification.
          DO NOT remove — without this Networx rejects the lead post. -->
@@ -1703,12 +1716,18 @@
                     <input type="checkbox" id="consentCheck" />
                     <label for="consentCheck">
                       By checking this box and clicking "Get My Free Estimate,"
-                      I agree to be contacted by Air Conditioner Lab and up to 3
-                      matched service professionals via phone, text, and email —
-                      including by autodialer and prerecorded messages — at the
-                      number and email provided, even if listed on a Do Not Call
-                      registry. Consent is not a condition of purchase.
-                      Message/data rates may apply. See our
+                      I agree to be contacted by Air Conditioner Lab,
+                      Networx Systems, Inc. and its
+                      <a
+                        href="https://www.networx.com/third-party-contractors"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >Partners</a
+                      >, and up to 3 matched service professionals via phone,
+                      text, and email — including by autodialer and prerecorded
+                      messages — at the number and email provided, even if listed
+                      on a Do Not Call registry. Consent is not a condition of
+                      purchase. Message/data rates may apply. See our
                       <a href="privacy-policy.html">Privacy Policy</a> and
                       <a href="terms-of-service.html">Terms</a>.
                     </label>
@@ -2399,11 +2418,11 @@
 
       const TCPA_COMPLIANCE_TEXT =
         'By checking this box and clicking "Get My Free Estimate," I agree ' +
-        'to be contacted by Air Conditioner Lab and up to 3 matched service ' +
-        'professionals via phone, text, and email — including by autodialer ' +
-        'and prerecorded messages — at the number and email provided, even ' +
-        'if listed on a Do Not Call registry. Consent is not a condition of ' +
-        'purchase. Message/data rates may apply.';
+        'to be contacted by Air Conditioner Lab, Networx Systems, Inc. and its ' +
+        'Partners, and up to 3 matched service professionals via phone, text, ' +
+        'and email — including by autodialer and prerecorded messages — at the ' +
+        'number and email provided, even if listed on a Do Not Call registry. ' +
+        'Consent is not a condition of purchase. Message/data rates may apply.';
 
       const submitBtn = document.getElementById('submitBtn');
       const submitError = document.getElementById('submitError');
