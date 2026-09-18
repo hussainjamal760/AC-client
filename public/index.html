@@ -2632,6 +2632,9 @@
           }
 
           currentStep = 'success';
+          if (typeof fbq === 'function') {
+            fbq('track', 'Lead');
+          }
           document
             .querySelectorAll('.step')
             .forEach((s) => s.classList.remove('active'));
