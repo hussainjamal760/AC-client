@@ -225,6 +225,9 @@ app.use(
           'https://connect.facebook.net',
           'https://www.facebook.com',
         ],
+        // Meta Pixel tracking requires frameSrc and formAction for facebook.com
+        frameSrc: ["'self'", 'https://www.facebook.com'],
+        formAction: ["'self'", 'https://www.facebook.com'],
         // TrustedForm's trustedform-1.12.10.js creates a Web Worker from a
         // data: URI for fraud/bot detection. Without worker-src allowing data:,
         // CSP falls back to script-src which blocks data: and kills cert generation.
@@ -401,7 +404,7 @@ app.post(
     phoneValidator('phone'),
     body('email').trim().isEmail().normalizeEmail(),
     body('tcpa_compliance_text').notEmpty(),
-    body('cert_url').optional().trim().isURL(),
+    body('cert_url').optional({ values: 'falsy' }).trim().isURL(),
     body('token').optional().isString(),
     body('comments').optional().isString().isLength({ max: 2000 }),
     body('address').optional().isString().isLength({ max: 255 }),
@@ -431,6 +434,8 @@ app.post(
         is_business,
       } = req.body;
 
+      const resolvedCertUrl = cert_url || CERT_URL;
+
       const { httpStatus, data } = await networxRequest({
         f_name,
         l_name,
@@ -439,8 +444,8 @@ app.post(
         phone,
         email,
         tcpa_compliance_text,
-        cert_url: CERT_URL || cert_url,
-        xxTrustedFormCertUrl: CERT_URL || cert_url,
+        cert_url: resolvedCertUrl,
+        xxTrustedFormCertUrl: resolvedCertUrl,
         token,
         comments,
         address,
@@ -473,7 +478,7 @@ app.post(
     body('l_name').trim().notEmpty(),
     phoneValidator('phone'),
     body('email').trim().isEmail().normalizeEmail(),
-    body('cert_url').optional().trim().isURL(),
+    body('cert_url').optional({ values: 'falsy' }).trim().isURL(),
     body('source_id').optional().isLength({ max: 15 }),
     body('hashed_contacts').optional().isArray(),
     body('is_business').optional().isIn(['0', '1', 0, 1]),

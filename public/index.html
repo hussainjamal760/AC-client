@@ -27,9 +27,75 @@
       src="https://www.facebook.com/tr?id=39511333821798602&ev=PageView&noscript=1"
     /></noscript>
     <!-- End Meta Pixel Code -->
-    <!-- TrustedForm: captures a real certificate URL (cert_url) for every
-         page visit. Required by Networx for lead post verification.
-         DO NOT remove — without this Networx rejects the lead post. -->
+    <!-- TrustedForm: Intercept cert creation at the earliest point before trustedform.js loads -->
+    <script type="text/javascript">
+      (function () {
+        window.__trustedFormCertUrl = '';
+        var setCert = function (urlOrId) {
+          if (!urlOrId) return;
+          var certUrl = typeof urlOrId === 'string' && urlOrId.startsWith('http')
+            ? urlOrId
+            : 'https://cert.trustedform.com/' + urlOrId;
+          window.__trustedFormCertUrl = certUrl;
+          var el =
+            document.getElementById('xxTrustedFormCertUrl') ||
+            document.querySelector('input[name="xxTrustedFormCertUrl"]');
+          if (el) el.value = certUrl;
+        };
+
+        // 1. Intercept fetch
+        var _fetch = window.fetch;
+        if (_fetch) {
+          window.fetch = function () {
+            var url = typeof arguments[0] === 'string'
+              ? arguments[0]
+              : ((arguments[0] && arguments[0].url) || '');
+            var p = _fetch.apply(this, arguments);
+            if (
+              url.includes('api.trustedform.com/certs') &&
+              !url.includes('/certs/')
+            ) {
+              p.then(function (r) {
+                if (r.status === 201 || r.status === 200) {
+                  r.clone().json().then(function (d) {
+                    var id = d.cert_id || d.id;
+                    if (id) setCert(id);
+                  }).catch(function(){});
+                }
+              }).catch(function(){});
+            }
+            return p;
+          };
+        }
+
+        // 2. Intercept XMLHttpRequest
+        var _XHR = window.XMLHttpRequest;
+        if (_XHR) {
+          var _open = _XHR.prototype.open;
+          var _send = _XHR.prototype.send;
+          _XHR.prototype.open = function (method, url) {
+            this._tfUrl = url;
+            return _open.apply(this, arguments);
+          };
+          _XHR.prototype.send = function () {
+            if (
+              this._tfUrl &&
+              typeof this._tfUrl === 'string' &&
+              this._tfUrl.includes('api.trustedform.com/certs')
+            ) {
+              this.addEventListener('load', function () {
+                try {
+                  var d = JSON.parse(this.responseText);
+                  var id = d.cert_id || d.id;
+                  if (id) setCert(id);
+                } catch (e) {}
+              });
+            }
+            return _send.apply(this, arguments);
+          };
+        }
+      })();
+    </script>
     <script type="text/javascript">
       (function () {
         var field = 'xxTrustedFormCertUrl';
@@ -1268,51 +1334,8 @@
     </style>
   </head>
   <body>
-    <!-- TrustedForm: hidden field populated by the inline script below -->
+    <!-- TrustedForm: hidden field populated by trustedform.js or head interceptor -->
     <input type="hidden" name="xxTrustedFormCertUrl" id="xxTrustedFormCertUrl" />
-
-    <!--
-      TrustedForm cert auto-populator.
-
-      trustedform-1.12.10.js silently fails to write the cert URL into the DOM
-      field (likely an internal eval/worker restriction in strict CSP mode).
-      This interceptor piggybacks on the already-working POST /certs call,
-      clones the 201 response, reads the cert_id, and writes the cert URL
-      directly — bypassing the SDK's field-population step entirely.
-    -->
-    <script>
-      (function () {
-        var _orig = window.fetch;
-        window.fetch = function () {
-          var url = typeof arguments[0] === 'string'
-            ? arguments[0]
-            : ((arguments[0] && arguments[0].url) || '');
-          var p = _orig.apply(this, arguments);
-          // Only intercept the cert-creation call (POST /certs, status 201)
-          if (
-            url.includes('api.trustedform.com/certs') &&
-            !url.includes('/certs/')
-          ) {
-            p.then(function (r) {
-              if (r.status === 201) {
-                r.clone().json().then(function (d) {
-                  var id = d.cert_id || d.id;
-                  if (id) {
-                    var el =
-                      document.getElementById('xxTrustedFormCertUrl') ||
-                      document.querySelector('input[name="xxTrustedFormCertUrl"]');
-                    if (el && !el.value) {
-                      el.value = 'https://cert.trustedform.com/' + id;
-                    }
-                  }
-                });
-              }
-            });
-          }
-          return p;
-        };
-      })();
-    </script>
 
 
 
@@ -2593,12 +2616,13 @@
           const taskIdVal = (formData.taskId || (document.getElementById('serviceTypeSelect') ? document.getElementById('serviceTypeSelect').value : '') || '27');
 
           const certUrlVal = (
-            document.getElementById('xxTrustedFormCertUrl') ||
-            document.querySelector('input[name="xxTrustedFormCertUrl"]') ||
-            document.querySelector('input[id^="xxTrustedFormCertUrl"]') ||
-            document.querySelector('input[name*="TrustedForm"]') ||
-            {}
-          ).value || undefined;
+            window.__trustedFormCertUrl ||
+            document.getElementById('xxTrustedFormCertUrl')?.value ||
+            document.querySelector('input[name="xxTrustedFormCertUrl"]')?.value ||
+            document.querySelector('input[id^="xxTrustedFormCertUrl"]')?.value ||
+            document.querySelector('input[name*="TrustedForm"]')?.value ||
+            undefined
+          );
 
           const res = await fetch(`${getApiBaseUrl()}/api/leads/ping-post`, {
             method: 'POST',
@@ -2632,8 +2656,10 @@
           }
 
           currentStep = 'success';
-          if (typeof fbq === 'function') {
-            fbq('track', 'Lead');
+          const fb = window.fbq || (typeof fbq !== 'undefined' ? fbq : null);
+          if (typeof fb === 'function') {
+            fb('track', 'Lead');
+            console.log('[Meta Pixel] Fired Lead event');
           }
           document
             .querySelectorAll('.step')
